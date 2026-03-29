@@ -11,7 +11,7 @@ This package provides a pure PHP implementation of the [Arabic (Hijri)](https://
 Requirements
 ============
 
-* PHP >= 8.5
+* PHP (64bit) >= 8.5
 
 Installation
 ============
