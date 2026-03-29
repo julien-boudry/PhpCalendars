@@ -1,5 +1,5 @@
-PHP calendar functions
-======================
+PHP Calendars
+=============
 
 This package provides a pure PHP implementation of the
 [Arabic (Hijri)](https://en.wikipedia.org/wiki/Islamic_calendar),
@@ -19,7 +19,7 @@ Installation
 ============
 
 ``` bash
-composer require fisharebest/ext-calendar
+composer require condorcet-php/php-calendars
 ```
 
 Object-oriented API
@@ -29,12 +29,12 @@ Use the calendar classes directly.  This API supports two additional
 calendars (Arabic and Persian) that are not available in the native extension.
 
 ``` php
-use Fisharebest\ExtCalendar\ArabicCalendar;
-use Fisharebest\ExtCalendar\FrenchCalendar;
-use Fisharebest\ExtCalendar\GregorianCalendar;
-use Fisharebest\ExtCalendar\JewishCalendar;
-use Fisharebest\ExtCalendar\JulianCalendar;
-use Fisharebest\ExtCalendar\PersianCalendar;
+use CondorcetPHP\PhpCalendars\ArabicCalendar;
+use CondorcetPHP\PhpCalendars\FrenchCalendar;
+use CondorcetPHP\PhpCalendars\GregorianCalendar;
+use CondorcetPHP\PhpCalendars\JewishCalendar;
+use CondorcetPHP\PhpCalendars\JulianCalendar;
+use CondorcetPHP\PhpCalendars\PersianCalendar;
 
 // Create a calendar
 $calendar = new GregorianCalendar();

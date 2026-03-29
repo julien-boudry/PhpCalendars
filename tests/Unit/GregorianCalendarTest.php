@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
-use \Fisharebest\ExtCalendar\GregorianCalendar;
-use \Fisharebest\ExtCalendar\Shim;
+use \CondorcetPHP\PhpCalendars\GregorianCalendar;
+use \CondorcetPHP\PhpCalendars\Shim;
 /**
  * Create the shim functions, so we can run tests on servers which do
  * not have the ext/calendar library installed.  For example HHVM.

@@ -19,7 +19,7 @@
  *            along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Fisharebest\ExtCalendar\Shim;
+use CondorcetPHP\PhpCalendars\Shim;
 
 if (!\defined('CAL_GREGORIAN')) {
     Shim::create();

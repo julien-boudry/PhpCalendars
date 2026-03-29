@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
-use \Fisharebest\ExtCalendar\JewishCalendar;
-use \Fisharebest\ExtCalendar\Shim;
+use \CondorcetPHP\PhpCalendars\JewishCalendar;
+use \CondorcetPHP\PhpCalendars\Shim;
 /**
  * Make sure we emulate the correct version of ext/calendar.
  */

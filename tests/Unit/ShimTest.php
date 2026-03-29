@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-use Fisharebest\ExtCalendar\Shim;
+use CondorcetPHP\PhpCalendars\Shim;
 use Tests\TestCase;
 
 beforeAll(function (): void {

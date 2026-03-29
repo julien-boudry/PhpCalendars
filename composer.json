@@ -1,13 +1,13 @@
 {
-    "name": "fisharebest/ext-calendar",
-    "description": "Implementation of the Arabic (Hijri), French, Gregorian, Jewish, Julian and Persian (Jalali) calendars.  Also provides a replacement for the PHP ext/calendar extension.",
+    "name": "condorcet-php/php-calendars",
+    "description": "Pure PHP implementation of the Arabic (Hijri), French, Gregorian, Jewish, Julian and Persian (Jalali) calendars. Also provides a drop-in replacement for the PHP ext/calendar extension.",
     "type": "library",
     "keywords": [
         "calendar", "ext-calendar", "julian day", "julian day number",
         "arabic", "hijri", "persian", "jalali", "shamsi",
         "gregorian", "julian", "jewish", "hebrew", "french"
     ],
-    "homepage": "https://github.com/fisharebest/ext-calendar",
+    "homepage": "https://github.com/condorcet-php/php-calendars",
     "license": "GPL-3.0-or-later",
     "authors": [{
             "name": "Greg Roach",
@@ -15,7 +15,7 @@
             "role": "Developer"
     }],
     "support": {
-            "issues": "https://github.com/fisharebest/ext-calendar/issues"
+            "issues": "https://github.com/condorcet-php/php-calendars/issues"
     },
     "require": {
         "php": ">=8.5"
@@ -35,13 +35,13 @@
             "src/shims.php"
         ],
         "psr-4": {
-            "Fisharebest\\ExtCalendar\\": "src/"
+            "CondorcetPHP\\PhpCalendars\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Fisharebest\\ExtCalendar\\Benchmarks\\": "benchmarks/"
+            "CondorcetPHP\\PhpCalendars\\Benchmarks\\": "benchmarks/"
         }
     },
     "scripts": {

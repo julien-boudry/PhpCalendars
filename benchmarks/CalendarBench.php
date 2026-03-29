@@ -1,17 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Fisharebest\ExtCalendar\Benchmarks;
+namespace CondorcetPHP\PhpCalendars\Benchmarks;
 
-use Fisharebest\ExtCalendar\ArabicCalendar;
-use Fisharebest\ExtCalendar\FrenchCalendar;
-use Fisharebest\ExtCalendar\GregorianCalendar;
-use Fisharebest\ExtCalendar\JewishCalendar;
-use Fisharebest\ExtCalendar\JulianCalendar;
-use Fisharebest\ExtCalendar\PersianCalendar;
-use PhpBench\Attributes\BeforeMethods;
-use PhpBench\Attributes\Groups;
-use PhpBench\Attributes\Iterations;
-use PhpBench\Attributes\Revs;
+use PhpBench\Attributes\{BeforeMethods, Groups, Iterations, Revs};
+use CondorcetPHP\PhpCalendars\{ArabicCalendar, FrenchCalendar, GregorianCalendar, JewishCalendar, JulianCalendar, PersianCalendar};
 
 #[Revs(1000)]
 #[Iterations(5)]
@@ -26,12 +18,12 @@ class CalendarBench
 
     public function setUp(): void
     {
-        $this->gregorian = new GregorianCalendar();
-        $this->julian = new JulianCalendar();
-        $this->french = new FrenchCalendar();
-        $this->jewish = new JewishCalendar();
-        $this->arabic = new ArabicCalendar();
-        $this->persian = new PersianCalendar();
+        $this->gregorian = new GregorianCalendar;
+        $this->julian = new JulianCalendar;
+        $this->french = new FrenchCalendar;
+        $this->jewish = new JewishCalendar;
+        $this->arabic = new ArabicCalendar;
+        $this->persian = new PersianCalendar;
     }
 
     // --- JD to YMD: native vs OOP ---
