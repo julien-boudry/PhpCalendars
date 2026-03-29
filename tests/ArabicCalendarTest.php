@@ -1,220 +1,151 @@
 <?php declare(strict_types=1);
-
+use \Fisharebest\ExtCalendar\ArabicCalendar;
+use \Fisharebest\ExtCalendar\Shim;
 /**
- * Test harness for the class ArabicCalendar.
- *
- * @author    Greg Roach <greg@subaqua.co.uk>
- * @copyright (c) 2014-2021 Greg Roach
- * @license   This program is free software: you can redistribute it and/or modify
- *            it under the terms of the GNU General Public License as published by
- *            the Free Software Foundation, either version 3 of the License, or
- *            (at your option) any later version.
- *
- *            This program is distributed in the hope that it will be useful,
- *            but WITHOUT ANY WARRANTY; without even the implied warranty of
- *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *            GNU General Public License for more details.
- *
- *            You should have received a copy of the GNU General Public License
- *            along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Create the shim functions, so we can run tests on servers which do
+ * not have the ext/calendar library installed.  For example HHVM.
  */
+beforeEach(function () {
+    Shim::create();
+});
+test('constants', function () {
+    $calendar = new ArabicCalendar;
 
-namespace Fisharebest\ExtCalendar;
+    expect($calendar->gedcomCalendarEscape())->toBe('@#DHIJRI@');
+    expect($calendar->jdStart())->toBe(1948440);
+    expect($calendar->jdEnd())->toBe(\PHP_INT_MAX);
+    expect($calendar->daysInWeek())->toBe(7);
+    expect($calendar->monthsInYear())->toBe(12);
+});
+test('is leap year', function () {
+    $arabic = new ArabicCalendar;
 
-use PHPUnit\Framework\TestCase;
+    expect(false)->toBe($arabic->isLeapYear(1201));
+    expect(true)->toBe($arabic->isLeapYear(1202));
+    expect(false)->toBe($arabic->isLeapYear(1203));
+    expect(false)->toBe($arabic->isLeapYear(1204));
+    expect(true)->toBe($arabic->isLeapYear(1205));
+    expect(false)->toBe($arabic->isLeapYear(1206));
+    expect(true)->toBe($arabic->isLeapYear(1207));
+    expect(false)->toBe($arabic->isLeapYear(1208));
+    expect(false)->toBe($arabic->isLeapYear(1209));
+    expect(true)->toBe($arabic->isLeapYear(1210));
+    expect(false)->toBe($arabic->isLeapYear(1211));
+    expect(false)->toBe($arabic->isLeapYear(1212));
+    expect(true)->toBe($arabic->isLeapYear(1213));
+    expect(false)->toBe($arabic->isLeapYear(1214));
+    expect(false)->toBe($arabic->isLeapYear(1215));
+    expect(true)->toBe($arabic->isLeapYear(1216));
+    expect(false)->toBe($arabic->isLeapYear(1217));
+    expect(true)->toBe($arabic->isLeapYear(1218));
+    expect(false)->toBe($arabic->isLeapYear(1219));
+    expect(false)->toBe($arabic->isLeapYear(1220));
+    expect(true)->toBe($arabic->isLeapYear(1221));
+    expect(false)->toBe($arabic->isLeapYear(1222));
+    expect(false)->toBe($arabic->isLeapYear(1223));
+    expect(true)->toBe($arabic->isLeapYear(1224));
+    expect(false)->toBe($arabic->isLeapYear(1225));
+    expect(true)->toBe($arabic->isLeapYear(1226));
+    expect(false)->toBe($arabic->isLeapYear(1227));
+    expect(false)->toBe($arabic->isLeapYear(1228));
+    expect(true)->toBe($arabic->isLeapYear(1229));
+    expect(false)->toBe($arabic->isLeapYear(1230));
+});
+test('days in month', function () {
+    $arabic = new ArabicCalendar;
 
-class ArabicCalendarTest extends TestCase
-{
-    /**
-     * Create the shim functions, so we can run tests on servers which do
-     * not have the ext/calendar library installed.  For example HHVM.
-     */
-    protected function setUp(): void
-    {
-        Shim::create();
+    expect(30)->toBe($arabic->daysInMonth(1201, 1));
+    expect(28)->toBe($arabic->daysInMonth(1201, 2));
+    expect(30)->toBe($arabic->daysInMonth(1201, 3));
+    expect(29)->toBe($arabic->daysInMonth(1201, 4));
+    expect(30)->toBe($arabic->daysInMonth(1201, 5));
+    expect(29)->toBe($arabic->daysInMonth(1201, 6));
+    expect(30)->toBe($arabic->daysInMonth(1201, 7));
+    expect(29)->toBe($arabic->daysInMonth(1201, 8));
+    expect(30)->toBe($arabic->daysInMonth(1201, 9));
+    expect(29)->toBe($arabic->daysInMonth(1201, 10));
+    expect(30)->toBe($arabic->daysInMonth(1201, 11));
+    expect(29)->toBe($arabic->daysInMonth(1201, 12));
+    expect(30)->toBe($arabic->daysInMonth(1202, 1));
+    expect(28)->toBe($arabic->daysInMonth(1202, 2));
+    expect(30)->toBe($arabic->daysInMonth(1202, 3));
+    expect(29)->toBe($arabic->daysInMonth(1202, 4));
+    expect(30)->toBe($arabic->daysInMonth(1202, 5));
+    expect(29)->toBe($arabic->daysInMonth(1202, 6));
+    expect(30)->toBe($arabic->daysInMonth(1202, 7));
+    expect(29)->toBe($arabic->daysInMonth(1202, 8));
+    expect(30)->toBe($arabic->daysInMonth(1202, 9));
+    expect(29)->toBe($arabic->daysInMonth(1202, 10));
+    expect(30)->toBe($arabic->daysInMonth(1202, 11));
+    expect(30)->toBe($arabic->daysInMonth(1202, 12));
+});
+test('ymd tojd', function () {
+    $arabic = new ArabicCalendar;
+
+    expect(1948440)->toBe($arabic->ymdToJd(1, 1, 1));
+    // 19 JUL 622 (Gregorian)
+    expect([1, 1, 1])->toBe($arabic->jdToYmd(1948440));
+    expect(2373709)->toBe($arabic->ymdToJd(1201, 1, 30));
+    expect([1201, 1, 30])->toBe($arabic->jdToYmd(2373709));
+    expect(2373737)->toBe($arabic->ymdToJd(1201, 2, 28));
+    expect([1201, 2, 28])->toBe($arabic->jdToYmd(2373737));
+    expect(2373768)->toBe($arabic->ymdToJd(1201, 3, 30));
+    expect([1201, 3, 30])->toBe($arabic->jdToYmd(2373768));
+    expect(2373797)->toBe($arabic->ymdToJd(1201, 4, 29));
+    expect([1201, 4, 29])->toBe($arabic->jdToYmd(2373797));
+    expect(2373827)->toBe($arabic->ymdToJd(1201, 5, 30));
+    expect([1201, 5, 30])->toBe($arabic->jdToYmd(2373827));
+    expect(2373856)->toBe($arabic->ymdToJd(1201, 6, 29));
+    expect([1201, 6, 29])->toBe($arabic->jdToYmd(2373856));
+    expect(2373886)->toBe($arabic->ymdToJd(1201, 7, 30));
+    expect([1201, 7, 30])->toBe($arabic->jdToYmd(2373886));
+    expect(2373915)->toBe($arabic->ymdToJd(1201, 8, 29));
+    expect([1201, 8, 29])->toBe($arabic->jdToYmd(2373915));
+    expect(2373945)->toBe($arabic->ymdToJd(1201, 9, 30));
+    expect([1201, 9, 30])->toBe($arabic->jdToYmd(2373945));
+    expect(2373974)->toBe($arabic->ymdToJd(1201, 10, 29));
+    expect([1201, 10, 29])->toBe($arabic->jdToYmd(2373974));
+    expect(2374004)->toBe($arabic->ymdToJd(1201, 11, 30));
+    expect([1201, 11, 30])->toBe($arabic->jdToYmd(2374004));
+    expect(2374033)->toBe($arabic->ymdToJd(1201, 12, 29));
+    expect([1201, 12, 29])->toBe($arabic->jdToYmd(2374033));
+    expect(2374063)->toBe($arabic->ymdToJd(1202, 1, 30));
+    expect([1202, 1, 30])->toBe($arabic->jdToYmd(2374063));
+    expect(2374091)->toBe($arabic->ymdToJd(1202, 2, 28));
+    expect([1202, 2, 28])->toBe($arabic->jdToYmd(2374091));
+    expect(2374122)->toBe($arabic->ymdToJd(1202, 3, 30));
+    expect([1202, 3, 30])->toBe($arabic->jdToYmd(2374122));
+    expect(2374151)->toBe($arabic->ymdToJd(1202, 4, 29));
+    expect([1202, 4, 29])->toBe($arabic->jdToYmd(2374151));
+    expect(2374181)->toBe($arabic->ymdToJd(1202, 5, 30));
+    expect([1202, 5, 30])->toBe($arabic->jdToYmd(2374181));
+    expect(2374210)->toBe($arabic->ymdToJd(1202, 6, 29));
+    expect([1202, 6, 29])->toBe($arabic->jdToYmd(2374210));
+    expect(2374240)->toBe($arabic->ymdToJd(1202, 7, 30));
+    expect([1202, 7, 30])->toBe($arabic->jdToYmd(2374240));
+    expect(2374269)->toBe($arabic->ymdToJd(1202, 8, 29));
+    expect([1202, 8, 29])->toBe($arabic->jdToYmd(2374269));
+    expect(2374299)->toBe($arabic->ymdToJd(1202, 9, 30));
+    expect([1202, 9, 30])->toBe($arabic->jdToYmd(2374299));
+    expect(2374328)->toBe($arabic->ymdToJd(1202, 10, 29));
+    expect([1202, 10, 29])->toBe($arabic->jdToYmd(2374328));
+    expect(2374358)->toBe($arabic->ymdToJd(1202, 11, 30));
+    expect([1202, 11, 30])->toBe($arabic->jdToYmd(2374358));
+    expect(2374388)->toBe($arabic->ymdToJd(1202, 12, 30));
+    expect([1202, 12, 30])->toBe($arabic->jdToYmd(2374388));
+});
+test('jd to ymd reciprocity', function () {
+    $calendar = new ArabicCalendar;
+
+    for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd += 79) {
+        [$y, $m, $d] = $calendar->jdToYmd($jd);
+        expect($calendar->ymdToJd($y, $m, $d))->toBe($jd);
     }
+});
+test('ymd to jd invalid month', function () {
+    $this->expectExceptionMessage('Month 14 is invalid for this calendar');
+    $this->expectException('InvalidArgumentException');
 
-    /**
-     * Test the class constants.
-     *
-     * @coversNothing
-     */
-    public function testConstants(): void
-    {
-        $calendar = new ArabicCalendar;
-
-        $this->assertSame('@#DHIJRI@', $calendar->gedcomCalendarEscape());
-        $this->assertSame(1948440, $calendar->jdStart());
-        $this->assertSame(\PHP_INT_MAX, $calendar->jdEnd());
-        $this->assertSame(7, $calendar->daysInWeek());
-        $this->assertSame(12, $calendar->monthsInYear());
-    }
-
-    /**
-     * Test the leap year calculations.
-     *
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::isLeapYear
-     */
-    public function testIsLeapYear(): void
-    {
-        $arabic = new ArabicCalendar;
-
-        $this->assertSame($arabic->isLeapYear(1201), false);
-        $this->assertSame($arabic->isLeapYear(1202), true);
-        $this->assertSame($arabic->isLeapYear(1203), false);
-        $this->assertSame($arabic->isLeapYear(1204), false);
-        $this->assertSame($arabic->isLeapYear(1205), true);
-        $this->assertSame($arabic->isLeapYear(1206), false);
-        $this->assertSame($arabic->isLeapYear(1207), true);
-        $this->assertSame($arabic->isLeapYear(1208), false);
-        $this->assertSame($arabic->isLeapYear(1209), false);
-        $this->assertSame($arabic->isLeapYear(1210), true);
-        $this->assertSame($arabic->isLeapYear(1211), false);
-        $this->assertSame($arabic->isLeapYear(1212), false);
-        $this->assertSame($arabic->isLeapYear(1213), true);
-        $this->assertSame($arabic->isLeapYear(1214), false);
-        $this->assertSame($arabic->isLeapYear(1215), false);
-        $this->assertSame($arabic->isLeapYear(1216), true);
-        $this->assertSame($arabic->isLeapYear(1217), false);
-        $this->assertSame($arabic->isLeapYear(1218), true);
-        $this->assertSame($arabic->isLeapYear(1219), false);
-        $this->assertSame($arabic->isLeapYear(1220), false);
-        $this->assertSame($arabic->isLeapYear(1221), true);
-        $this->assertSame($arabic->isLeapYear(1222), false);
-        $this->assertSame($arabic->isLeapYear(1223), false);
-        $this->assertSame($arabic->isLeapYear(1224), true);
-        $this->assertSame($arabic->isLeapYear(1225), false);
-        $this->assertSame($arabic->isLeapYear(1226), true);
-        $this->assertSame($arabic->isLeapYear(1227), false);
-        $this->assertSame($arabic->isLeapYear(1228), false);
-        $this->assertSame($arabic->isLeapYear(1229), true);
-        $this->assertSame($arabic->isLeapYear(1230), false);
-    }
-
-    /**
-     * Test the calculation of the number of days in each month.
-     *
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::daysInMonth
-     */
-    public function testDaysInMonth(): void
-    {
-        $arabic = new ArabicCalendar;
-
-        $this->assertSame($arabic->daysInMonth(1201, 1), 30);
-        $this->assertSame($arabic->daysInMonth(1201, 2), 28);
-        $this->assertSame($arabic->daysInMonth(1201, 3), 30);
-        $this->assertSame($arabic->daysInMonth(1201, 4), 29);
-        $this->assertSame($arabic->daysInMonth(1201, 5), 30);
-        $this->assertSame($arabic->daysInMonth(1201, 6), 29);
-        $this->assertSame($arabic->daysInMonth(1201, 7), 30);
-        $this->assertSame($arabic->daysInMonth(1201, 8), 29);
-        $this->assertSame($arabic->daysInMonth(1201, 9), 30);
-        $this->assertSame($arabic->daysInMonth(1201, 10), 29);
-        $this->assertSame($arabic->daysInMonth(1201, 11), 30);
-        $this->assertSame($arabic->daysInMonth(1201, 12), 29);
-        $this->assertSame($arabic->daysInMonth(1202, 1), 30);
-        $this->assertSame($arabic->daysInMonth(1202, 2), 28);
-        $this->assertSame($arabic->daysInMonth(1202, 3), 30);
-        $this->assertSame($arabic->daysInMonth(1202, 4), 29);
-        $this->assertSame($arabic->daysInMonth(1202, 5), 30);
-        $this->assertSame($arabic->daysInMonth(1202, 6), 29);
-        $this->assertSame($arabic->daysInMonth(1202, 7), 30);
-        $this->assertSame($arabic->daysInMonth(1202, 8), 29);
-        $this->assertSame($arabic->daysInMonth(1202, 9), 30);
-        $this->assertSame($arabic->daysInMonth(1202, 10), 29);
-        $this->assertSame($arabic->daysInMonth(1202, 11), 30);
-        $this->assertSame($arabic->daysInMonth(1202, 12), 30);
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days.
-     *
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::ymdToJd
-     */
-    public function testYmdTojd(): void
-    {
-        $arabic = new ArabicCalendar;
-
-        $this->assertSame($arabic->ymdToJd(1, 1, 1), 1948440);  // 19 JUL 622 (Gregorian)
-        $this->assertSame($arabic->jdToYmd(1948440), [1, 1, 1]);
-        $this->assertSame($arabic->ymdToJd(1201, 1, 30), 2373709);
-        $this->assertSame($arabic->jdToYmd(2373709), [1201, 1, 30]);
-        $this->assertSame($arabic->ymdToJd(1201, 2, 28), 2373737);
-        $this->assertSame($arabic->jdToYmd(2373737), [1201, 2, 28]);
-        $this->assertSame($arabic->ymdToJd(1201, 3, 30), 2373768);
-        $this->assertSame($arabic->jdToYmd(2373768), [1201, 3, 30]);
-        $this->assertSame($arabic->ymdToJd(1201, 4, 29), 2373797);
-        $this->assertSame($arabic->jdToYmd(2373797), [1201, 4, 29]);
-        $this->assertSame($arabic->ymdToJd(1201, 5, 30), 2373827);
-        $this->assertSame($arabic->jdToYmd(2373827), [1201, 5, 30]);
-        $this->assertSame($arabic->ymdToJd(1201, 6, 29), 2373856);
-        $this->assertSame($arabic->jdToYmd(2373856), [1201, 6, 29]);
-        $this->assertSame($arabic->ymdToJd(1201, 7, 30), 2373886);
-        $this->assertSame($arabic->jdToYmd(2373886), [1201, 7, 30]);
-        $this->assertSame($arabic->ymdToJd(1201, 8, 29), 2373915);
-        $this->assertSame($arabic->jdToYmd(2373915), [1201, 8, 29]);
-        $this->assertSame($arabic->ymdToJd(1201, 9, 30), 2373945);
-        $this->assertSame($arabic->jdToYmd(2373945), [1201, 9, 30]);
-        $this->assertSame($arabic->ymdToJd(1201, 10, 29), 2373974);
-        $this->assertSame($arabic->jdToYmd(2373974), [1201, 10, 29]);
-        $this->assertSame($arabic->ymdToJd(1201, 11, 30), 2374004);
-        $this->assertSame($arabic->jdToYmd(2374004), [1201, 11, 30]);
-        $this->assertSame($arabic->ymdToJd(1201, 12, 29), 2374033);
-        $this->assertSame($arabic->jdToYmd(2374033), [1201, 12, 29]);
-        $this->assertSame($arabic->ymdToJd(1202, 1, 30), 2374063);
-        $this->assertSame($arabic->jdToYmd(2374063), [1202, 1, 30]);
-        $this->assertSame($arabic->ymdToJd(1202, 2, 28), 2374091);
-        $this->assertSame($arabic->jdToYmd(2374091), [1202, 2, 28]);
-        $this->assertSame($arabic->ymdToJd(1202, 3, 30), 2374122);
-        $this->assertSame($arabic->jdToYmd(2374122), [1202, 3, 30]);
-        $this->assertSame($arabic->ymdToJd(1202, 4, 29), 2374151);
-        $this->assertSame($arabic->jdToYmd(2374151), [1202, 4, 29]);
-        $this->assertSame($arabic->ymdToJd(1202, 5, 30), 2374181);
-        $this->assertSame($arabic->jdToYmd(2374181), [1202, 5, 30]);
-        $this->assertSame($arabic->ymdToJd(1202, 6, 29), 2374210);
-        $this->assertSame($arabic->jdToYmd(2374210), [1202, 6, 29]);
-        $this->assertSame($arabic->ymdToJd(1202, 7, 30), 2374240);
-        $this->assertSame($arabic->jdToYmd(2374240), [1202, 7, 30]);
-        $this->assertSame($arabic->ymdToJd(1202, 8, 29), 2374269);
-        $this->assertSame($arabic->jdToYmd(2374269), [1202, 8, 29]);
-        $this->assertSame($arabic->ymdToJd(1202, 9, 30), 2374299);
-        $this->assertSame($arabic->jdToYmd(2374299), [1202, 9, 30]);
-        $this->assertSame($arabic->ymdToJd(1202, 10, 29), 2374328);
-        $this->assertSame($arabic->jdToYmd(2374328), [1202, 10, 29]);
-        $this->assertSame($arabic->ymdToJd(1202, 11, 30), 2374358);
-        $this->assertSame($arabic->jdToYmd(2374358), [1202, 11, 30]);
-        $this->assertSame($arabic->ymdToJd(1202, 12, 30), 2374388);
-        $this->assertSame($arabic->jdToYmd(2374388), [1202, 12, 30]);
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days, and vice versa, returns the same result.
-     *
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::ymdToJd
-     */
-    public function testJdToYmdReciprocity(): void
-    {
-        $calendar = new ArabicCalendar;
-
-        for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd += 79) {
-            [$y, $m, $d] = $calendar->jdToYmd($jd);
-            $this->assertSame($jd, $calendar->ymdToJd($y, $m, $d));
-        }
-    }
-
-    /**
-     * Test the conversion of a YMD date to JD when the month is not a valid number.
-     *
-     * @covers \Fisharebest\ExtCalendar\ArabicCalendar::ymdToJd
-     */
-    public function testYmdToJdInvalidMonth(): void
-    {
-        $this->expectExceptionMessage('Month 14 is invalid for this calendar');
-        $this->expectException('InvalidArgumentException');
-
-        $calendar = new ArabicCalendar;
-        $calendar->ymdToJd(4, 14, 1);
-    }
-}
+    $calendar = new ArabicCalendar;
+    $calendar->ymdToJd(4, 14, 1);
+});

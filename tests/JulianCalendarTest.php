@@ -1,244 +1,136 @@
 <?php declare(strict_types=1);
-
+use \Fisharebest\ExtCalendar\JulianCalendar;
+use \Fisharebest\ExtCalendar\Shim;
 /**
- * Test harness for the class JulianCalendar.
- *
- * @author    Greg Roach <greg@subaqua.co.uk>
- * @copyright (c) 2014-2021 Greg Roach
- * @license   This program is free software: you can redistribute it and/or modify
- *            it under the terms of the GNU General Public License as published by
- *            the Free Software Foundation, either version 3 of the License, or
- *            (at your option) any later version.
- *
- *            This program is distributed in the hope that it will be useful,
- *            but WITHOUT ANY WARRANTY; without even the implied warranty of
- *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *            GNU General Public License for more details.
- *
- *            You should have received a copy of the GNU General Public License
- *            along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Create the shim functions, so we can run tests on servers which do
+ * not have the ext/calendar library installed.  For example HHVM.
  */
+beforeEach(function () {
+    Shim::create();
+});
+test('constants', function () {
+    $calendar = new JulianCalendar;
 
-namespace Fisharebest\ExtCalendar;
+    expect($calendar->gedcomCalendarEscape())->toBe('@#DJULIAN@');
+    expect($calendar->jdStart())->toBe(1);
+    expect($calendar->jdEnd())->toBe(\PHP_INT_MAX);
+    expect($calendar->daysInWeek())->toBe(7);
+    expect($calendar->monthsInYear())->toBe(12);
+});
+test('is leap year', function () {
+    $julian = new JulianCalendar;
 
-use PHPUnit\Framework\TestCase;
+    expect(true)->toBe($julian->isLeapYear(-5));
+    expect(false)->toBe($julian->isLeapYear(-4));
+    expect(false)->toBe($julian->isLeapYear(-3));
+    expect(false)->toBe($julian->isLeapYear(-2));
+    expect(true)->toBe($julian->isLeapYear(-1));
+    expect(true)->toBe($julian->isLeapYear(1500));
+    expect(true)->toBe($julian->isLeapYear(1600));
+    expect(true)->toBe($julian->isLeapYear(1700));
+    expect(true)->toBe($julian->isLeapYear(1800));
+    expect(true)->toBe($julian->isLeapYear(1900));
+    expect(false)->toBe($julian->isLeapYear(1999));
+    expect(true)->toBe($julian->isLeapYear(2000));
+    expect(false)->toBe($julian->isLeapYear(2001));
+    expect(false)->toBe($julian->isLeapYear(2002));
+    expect(false)->toBe($julian->isLeapYear(2003));
+    expect(true)->toBe($julian->isLeapYear(2004));
+    expect(false)->toBe($julian->isLeapYear(2005));
+    expect(true)->toBe($julian->isLeapYear(2100));
+    expect(true)->toBe($julian->isLeapYear(2200));
+});
+test('easter days coverage', function () {
+    $julian = new JulianCalendar;
 
-class JulianCalendarTest extends TestCase
-{
-    /**
-     * Create the shim functions, so we can run tests on servers which do
-     * not have the ext/calendar library installed.  For example HHVM.
-     */
-    protected function setUp(): void
-    {
-        Shim::create();
+    foreach ([2037, 2036, 2029, 1972] as $year) {
+        expect(easter_days($year, \CAL_EASTER_ALWAYS_JULIAN))->toBe($julian->easterDays($year));
     }
+});
+test('easter days modern times', function () {
+    $julian = new JulianCalendar;
 
-    /**
-     * Test the class constants.
-     *
-     * @coversNothing
-     */
-    public function testConstants(): void
-    {
-        $calendar = new JulianCalendar;
-
-        $this->assertSame('@#DJULIAN@', $calendar->gedcomCalendarEscape());
-        $this->assertSame(1, $calendar->jdStart());
-        $this->assertSame(\PHP_INT_MAX, $calendar->jdEnd());
-        $this->assertSame(7, $calendar->daysInWeek());
-        $this->assertSame(12, $calendar->monthsInYear());
+    for ($year = 1970; $year <= 2037; ++$year) {
+        expect(easter_days($year, \CAL_EASTER_ALWAYS_JULIAN))->toBe($julian->easterDays($year));
     }
+});
+test('days in month', function () {
+    $julian = new JulianCalendar;
 
-    /**
-     * Test the leap year calculations.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::isLeapYear
-     */
-    public function testIsLeapYear(): void
-    {
-        $julian = new JulianCalendar;
-
-        $this->assertSame($julian->isLeapYear(-5), true);
-        $this->assertSame($julian->isLeapYear(-4), false);
-        $this->assertSame($julian->isLeapYear(-3), false);
-        $this->assertSame($julian->isLeapYear(-2), false);
-        $this->assertSame($julian->isLeapYear(-1), true);
-        $this->assertSame($julian->isLeapYear(1500), true);
-        $this->assertSame($julian->isLeapYear(1600), true);
-        $this->assertSame($julian->isLeapYear(1700), true);
-        $this->assertSame($julian->isLeapYear(1800), true);
-        $this->assertSame($julian->isLeapYear(1900), true);
-        $this->assertSame($julian->isLeapYear(1999), false);
-        $this->assertSame($julian->isLeapYear(2000), true);
-        $this->assertSame($julian->isLeapYear(2001), false);
-        $this->assertSame($julian->isLeapYear(2002), false);
-        $this->assertSame($julian->isLeapYear(2003), false);
-        $this->assertSame($julian->isLeapYear(2004), true);
-        $this->assertSame($julian->isLeapYear(2005), false);
-        $this->assertSame($julian->isLeapYear(2100), true);
-        $this->assertSame($julian->isLeapYear(2200), true);
-    }
-
-    /**
-     * Test the calculation of Easter against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::easterDays
-     */
-    public function testEasterDaysCoverage(): void
-    {
-        $julian = new JulianCalendar;
-
-        foreach ([2037, 2036, 2029, 1972] as $year) {
-            $this->assertSame($julian->easterDays($year), easter_days($year, \CAL_EASTER_ALWAYS_JULIAN));
-        }
-    }
-
-    /**
-     * Test the calculation of Easter against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::easterDays
-     */
-    public function testEasterDaysModernTimes(): void
-    {
-        $julian = new JulianCalendar;
-
-        for ($year = 1970; $year <= 2037; ++$year) {
-            $this->assertSame($julian->easterDays($year), easter_days($year, \CAL_EASTER_ALWAYS_JULIAN));
-        }
-    }
-
-    /**
-     * Test the calculation of the number of days in each month against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::daysInMonth
-     */
-    public function testDaysInMonth(): void
-    {
-        $julian = new JulianCalendar;
-
-        foreach ([-5, -4, -1, 1, 1500, 1600, 1700, 1800, 1900, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2100, 2200] as $year) {
-            for ($month = 1; $month <= 12; ++$month) {
-                $this->assertSame($julian->daysInMonth($year, $month), cal_days_in_month(\CAL_JULIAN, $month, $year));
-            }
-        }
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     */
-    public function testYmdToJdDays(): void
-    {
-        $julian = new JulianCalendar;
-
-        foreach ([2012, 2014] as $year) {
-            for ($day = 1; $day <= 28; ++$day) {
-                $julian_day = juliantojd(8, $day, $year);
-                $ymd = $julian->jdToYmd($julian_day);
-
-                $this->assertSame($julian->ymdToJd($year, 8, $day), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtojulian($julian_day));
-            }
-        }
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     */
-    public function testYmdToJdMonths(): void
-    {
-        $julian = new JulianCalendar;
-
+    foreach ([-5, -4, -1, 1, 1500, 1600, 1700, 1800, 1900, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2100, 2200] as $year) {
         for ($month = 1; $month <= 12; ++$month) {
-            foreach ([2012, 2014] as $year) {
-                $julian_day = juliantojd($month, 9, $year);
-                $ymd = $julian->jdToYmd($julian_day);
-
-                $this->assertSame($julian->ymdToJd($year, $month, 9), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtojulian($julian_day));
-            }
+            expect(cal_days_in_month(\CAL_JULIAN, $month, $year))->toBe($julian->daysInMonth($year, $month));
         }
     }
+});
+test('ymd to jd days', function () {
+    $julian = new JulianCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     */
-    public function testYmdToJdYears(): void
-    {
-        $julian = new JulianCalendar;
-
-        for ($year = 1970; $year <= 2037; ++$year) {
-            $julian_day = juliantojd(8, 9, $year);
+    foreach ([2012, 2014] as $year) {
+        for ($day = 1; $day <= 28; ++$day) {
+            $julian_day = juliantojd(8, $day, $year);
             $ymd = $julian->jdToYmd($julian_day);
 
-            $this->assertSame($julian->ymdToJd($year, 8, 9), $julian_day);
-            $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtojulian($julian_day));
+            expect($julian_day)->toBe($julian->ymdToJd($year, 8, $day));
+            expect(jdtojulian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('ymd to jd months', function () {
+    $julian = new JulianCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     */
-    public function testYmdToJdYearsBc(): void
-    {
-        $julian = new JulianCalendar;
+    for ($month = 1; $month <= 12; ++$month) {
+        foreach ([2012, 2014] as $year) {
+            $julian_day = juliantojd($month, 9, $year);
+            $ymd = $julian->jdToYmd($julian_day);
 
-        for ($year = -5; $year <= 5; ++$year) {
-            if ($year != 0) {
-                $julian_day = juliantojd(1, 1, $year);
-                $ymd = $julian->jdToYmd($julian_day);
-
-                $this->assertSame($julian->ymdToJd($year, 1, 1), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtojulian($julian_day));
-
-                $julian_day = juliantojd(12, 31, $year);
-                $ymd = $julian->jdToYmd($julian_day);
-
-                $this->assertSame($julian->ymdToJd($year, 12, 31), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtojulian($julian_day));
-            }
+            expect($julian_day)->toBe($julian->ymdToJd($year, $month, 9));
+            expect(jdtojulian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('ymd to jd years', function () {
+    $julian = new JulianCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days, and vice versa, returns the same result.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     */
-    public function testJdToYmdReciprocity(): void
-    {
-        $calendar = new JulianCalendar;
+    for ($year = 1970; $year <= 2037; ++$year) {
+        $julian_day = juliantojd(8, 9, $year);
+        $ymd = $julian->jdToYmd($julian_day);
 
-        for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd += 79) {
-            [$y, $m, $d] = $calendar->jdToYmd($jd);
-            $this->assertSame($jd, $calendar->ymdToJd($y, $m, $d));
+        expect($julian_day)->toBe($julian->ymdToJd($year, 8, 9));
+        expect(jdtojulian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
+    }
+});
+test('ymd to jd years bc', function () {
+    $julian = new JulianCalendar;
+
+    for ($year = -5; $year <= 5; ++$year) {
+        if ($year != 0) {
+            $julian_day = juliantojd(1, 1, $year);
+            $ymd = $julian->jdToYmd($julian_day);
+
+            expect($julian_day)->toBe($julian->ymdToJd($year, 1, 1));
+            expect(jdtojulian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
+
+            $julian_day = juliantojd(12, 31, $year);
+            $ymd = $julian->jdToYmd($julian_day);
+
+            expect($julian_day)->toBe($julian->ymdToJd($year, 12, 31));
+            expect(jdtojulian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('jd to ymd reciprocity', function () {
+    $calendar = new JulianCalendar;
 
-    /**
-     * Test the conversion of a YMD date to JD when the month is not a valid number.
-     *
-     * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     */
-    public function testYmdToJdInvalidMonth(): void
-    {
-        $this->expectExceptionMessage('Month 14 is invalid for this calendar');
-        $this->expectException('InvalidArgumentException');
-
-        $calendar = new JulianCalendar;
-        $calendar->ymdToJd(4, 14, 1);
+    for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd += 79) {
+        [$y, $m, $d] = $calendar->jdToYmd($jd);
+        expect($calendar->ymdToJd($y, $m, $d))->toBe($jd);
     }
-}
+});
+test('ymd to jd invalid month', function () {
+    $this->expectExceptionMessage('Month 14 is invalid for this calendar');
+    $this->expectException('InvalidArgumentException');
+
+    $calendar = new JulianCalendar;
+    $calendar->ymdToJd(4, 14, 1);
+});

@@ -1,206 +1,112 @@
 <?php declare(strict_types=1);
-
+use \Fisharebest\ExtCalendar\FrenchCalendar;
+use \Fisharebest\ExtCalendar\Shim;
 /**
- * Test harness for the class FrenchCalendar.
- *
- * @author    Greg Roach <greg@subaqua.co.uk>
- * @copyright (c) 2014-2021 Greg Roach
- * @license   This program is free software: you can redistribute it and/or modify
- *            it under the terms of the GNU General Public License as published by
- *            the Free Software Foundation, either version 3 of the License, or
- *            (at your option) any later version.
- *
- *            This program is distributed in the hope that it will be useful,
- *            but WITHOUT ANY WARRANTY; without even the implied warranty of
- *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *            GNU General Public License for more details.
- *
- *            You should have received a copy of the GNU General Public License
- *            along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Create the shim functions, so we can run tests on servers which do
+ * not have the ext/calendar library installed.  For example HHVM.
  */
+beforeEach(function () {
+    Shim::create();
+});
+test('constants', function () {
+    $calendar = new FrenchCalendar;
 
-namespace Fisharebest\ExtCalendar;
+    expect($calendar->gedcomCalendarEscape())->toBe('@#DFRENCH R@');
+    expect($calendar->jdStart())->toBe(2375840);
+    expect($calendar->jdEnd())->toBe(2380687);
+    expect($calendar->daysInWeek())->toBe(10);
+    expect($calendar->monthsInYear())->toBe(13);
+});
+test('is leap year', function () {
+    $french = new FrenchCalendar;
 
-use PHPUnit\Framework\TestCase;
+    expect(false)->toBe($french->isLeapYear(1));
+    expect(false)->toBe($french->isLeapYear(2));
+    expect(true)->toBe($french->isLeapYear(3));
+    expect(false)->toBe($french->isLeapYear(4));
+    expect(false)->toBe($french->isLeapYear(5));
+    expect(false)->toBe($french->isLeapYear(6));
+    expect(true)->toBe($french->isLeapYear(7));
+    expect(false)->toBe($french->isLeapYear(8));
+    expect(false)->toBe($french->isLeapYear(9));
+    expect(false)->toBe($french->isLeapYear(10));
+    expect(true)->toBe($french->isLeapYear(11));
+    expect(false)->toBe($french->isLeapYear(12));
+    expect(false)->toBe($french->isLeapYear(13));
+    expect(false)->toBe($french->isLeapYear(14));
+});
+test('days in month', function () {
+    $french = new FrenchCalendar;
 
-class FrenchCalendarTest extends TestCase
-{
-    /**
-     * Create the shim functions, so we can run tests on servers which do
-     * not have the ext/calendar library installed.  For example HHVM.
-     */
-    protected function setUp(): void
-    {
-        Shim::create();
-    }
-
-    /**
-     * Test the class constants.
-     *
-     * @coversNothing
-     */
-    public function testConstants(): void
-    {
-        $calendar = new FrenchCalendar;
-
-        $this->assertSame('@#DFRENCH R@', $calendar->gedcomCalendarEscape());
-        $this->assertSame(2375840, $calendar->jdStart());
-        $this->assertSame(2380687, $calendar->jdEnd());
-        $this->assertSame(10, $calendar->daysInWeek());
-        $this->assertSame(13, $calendar->monthsInYear());
-    }
-
-    /**
-     * Test the leap year calculations.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::isLeapYear
-     */
-    public function testIsLeapYear(): void
-    {
-        $french = new FrenchCalendar;
-
-        $this->assertSame($french->isLeapYear(1), false);
-        $this->assertSame($french->isLeapYear(2), false);
-        $this->assertSame($french->isLeapYear(3), true);
-        $this->assertSame($french->isLeapYear(4), false);
-        $this->assertSame($french->isLeapYear(5), false);
-        $this->assertSame($french->isLeapYear(6), false);
-        $this->assertSame($french->isLeapYear(7), true);
-        $this->assertSame($french->isLeapYear(8), false);
-        $this->assertSame($french->isLeapYear(9), false);
-        $this->assertSame($french->isLeapYear(10), false);
-        $this->assertSame($french->isLeapYear(11), true);
-        $this->assertSame($french->isLeapYear(12), false);
-        $this->assertSame($french->isLeapYear(13), false);
-        $this->assertSame($french->isLeapYear(14), false);
-    }
-
-    /**
-     * Test the calculation of the number of days in each month against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::daysInMonth
-     */
-    public function testDaysInMonth(): void
-    {
-        $french = new FrenchCalendar;
-
-        // Cannot test year 14 against PHP, due to PHP bug 67976.
-        for ($year = 1; $year <= 13; ++$year) {
-            for ($month = 1; $month <= 13; ++$month) {
-                $this->assertSame($french->daysInMonth($year, $month), cal_days_in_month(\CAL_FRENCH, $month, $year));
-            }
+    // Cannot test year 14 against PHP, due to PHP bug 67976.
+    for ($year = 1; $year <= 13; ++$year) {
+        for ($month = 1; $month <= 13; ++$month) {
+            expect(cal_days_in_month(\CAL_FRENCH, $month, $year))->toBe($french->daysInMonth($year, $month));
         }
     }
+});
+test('ymd tojd', function () {
+    $french = new FrenchCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     */
-    public function testYmdTojd(): void
-    {
-        $french = new FrenchCalendar;
+    expect(2375840)->toBe($french->ymdToJd(1, 1, 1));
+    expect(2380952)->toBe($french->ymdToJd(14, 13, 5));
 
-        $this->assertSame($french->ymdToJd(1, 1, 1), 2375840);
-        $this->assertSame($french->ymdToJd(14, 13, 5), 2380952);
+    expect([1, 1, 1])->toBe($french->jdToYmd(2375840));
+    expect([14, 13, 5])->toBe($french->jdToYmd(2380952));
+});
+test('ymd to jd days', function () {
+    $french = new FrenchCalendar;
 
-        $this->assertSame($french->jdToYmd(2375840), [1, 1, 1]);
-        $this->assertSame($french->jdToYmd(2380952), [14, 13, 5]);
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     */
-    public function testYmdToJdDays(): void
-    {
-        $french = new FrenchCalendar;
-
-        foreach ([3, 4] as $year) {
-            for ($day = 1; $day <= 30; ++$day) {
-                $julian_day = frenchtojd(8, $day, $year);
-                $ymd = $french->jdToYmd($julian_day);
-
-                $this->assertSame($french->ymdToJd($year, 8, $day), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtofrench($julian_day));
-            }
-        }
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     */
-    public function testYmdToJdMonths(): void
-    {
-        $french = new FrenchCalendar;
-
-        for ($month = 1; $month <= 12; ++$month) {
-            $julian_day = frenchtojd($month, 9, 5);
+    foreach ([3, 4] as $year) {
+        for ($day = 1; $day <= 30; ++$day) {
+            $julian_day = frenchtojd(8, $day, $year);
             $ymd = $french->jdToYmd($julian_day);
 
-            $this->assertSame($french->ymdToJd(5, $month, 9), $julian_day);
-            $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtofrench($julian_day));
-
-            $julian_day = frenchtojd($month, 9, 5);
-            $ymd = $french->jdToYmd($julian_day);
-
-            $this->assertSame($french->ymdToJd(5, $month, 9), $julian_day);
-            $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtofrench($julian_day));
+            expect($julian_day)->toBe($french->ymdToJd($year, 8, $day));
+            expect(jdtofrench($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('ymd to jd months', function () {
+    $french = new FrenchCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     */
-    public function testYmdToJdYears(): void
-    {
-        $french = new FrenchCalendar;
+    for ($month = 1; $month <= 12; ++$month) {
+        $julian_day = frenchtojd($month, 9, 5);
+        $ymd = $french->jdToYmd($julian_day);
 
-        for ($year = 1; $year <= 14; ++$year) {
-            $julian_day = frenchtojd(8, 9, $year);
-            $ymd = $french->jdToYmd($julian_day);
+        expect($julian_day)->toBe($french->ymdToJd(5, $month, 9));
+        expect(jdtofrench($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
 
-            $this->assertSame($french->ymdToJd($year, 8, 9), $julian_day);
-            $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtofrench($julian_day));
-        }
+        $julian_day = frenchtojd($month, 9, 5);
+        $ymd = $french->jdToYmd($julian_day);
+
+        expect($julian_day)->toBe($french->ymdToJd(5, $month, 9));
+        expect(jdtofrench($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
     }
+});
+test('ymd to jd years', function () {
+    $french = new FrenchCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days, and vice versa, returns the same result.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     */
-    public function testJdToYmdReciprocity(): void
-    {
-        $calendar = new FrenchCalendar;
+    for ($year = 1; $year <= 14; ++$year) {
+        $julian_day = frenchtojd(8, 9, $year);
+        $ymd = $french->jdToYmd($julian_day);
 
-        for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd++) {
-            [$y, $m, $d] = $calendar->jdToYmd($jd);
-            $this->assertSame($jd, $calendar->ymdToJd($y, $m, $d));
-        }
+        expect($julian_day)->toBe($french->ymdToJd($year, 8, 9));
+        expect(jdtofrench($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
     }
+});
+test('jd to ymd reciprocity', function () {
+    $calendar = new FrenchCalendar;
 
-    /**
-     * Test the conversion of a YMD date to JD when the month is not a valid number.
-     *
-     * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     */
-    public function testYmdToJdInvalidMonth(): void
-    {
-        $this->expectExceptionMessage('Month 14 is invalid for this calendar');
-        $this->expectException('InvalidArgumentException');
-
-        $calendar = new FrenchCalendar;
-        $calendar->ymdToJd(4, 14, 1);
+    for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd++) {
+        [$y, $m, $d] = $calendar->jdToYmd($jd);
+        expect($calendar->ymdToJd($y, $m, $d))->toBe($jd);
     }
-}
+});
+test('ymd to jd invalid month', function () {
+    $this->expectExceptionMessage('Month 14 is invalid for this calendar');
+    $this->expectException('InvalidArgumentException');
+
+    $calendar = new FrenchCalendar;
+    $calendar->ymdToJd(4, 14, 1);
+});

@@ -1,244 +1,136 @@
 <?php declare(strict_types=1);
-
+use \Fisharebest\ExtCalendar\GregorianCalendar;
+use \Fisharebest\ExtCalendar\Shim;
 /**
- * Test harness for the class GregorianCalendar.
- *
- * @author    Greg Roach <greg@subaqua.co.uk>
- * @copyright (c) 2014-2021 Greg Roach
- * @license   This program is free software: you can redistribute it and/or modify
- *            it under the terms of the GNU General Public License as published by
- *            the Free Software Foundation, either version 3 of the License, or
- *            (at your option) any later version.
- *
- *            This program is distributed in the hope that it will be useful,
- *            but WITHOUT ANY WARRANTY; without even the implied warranty of
- *            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *            GNU General Public License for more details.
- *
- *            You should have received a copy of the GNU General Public License
- *            along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Create the shim functions, so we can run tests on servers which do
+ * not have the ext/calendar library installed.  For example HHVM.
  */
+beforeEach(function () {
+    Shim::create();
+});
+test('constants', function () {
+    $calendar = new GregorianCalendar;
 
-namespace Fisharebest\ExtCalendar;
+    expect($calendar->gedcomCalendarEscape())->toBe('@#DGREGORIAN@');
+    expect($calendar->jdStart())->toBe(1);
+    expect($calendar->jdEnd())->toBe(\PHP_INT_MAX);
+    expect($calendar->daysInWeek())->toBe(7);
+    expect($calendar->monthsInYear())->toBe(12);
+});
+test('is leap year', function () {
+    $gregorian = new GregorianCalendar;
 
-use PHPUnit\Framework\TestCase;
+    expect(true)->toBe($gregorian->isLeapYear(-5));
+    expect(false)->toBe($gregorian->isLeapYear(-4));
+    expect(false)->toBe($gregorian->isLeapYear(-3));
+    expect(false)->toBe($gregorian->isLeapYear(-2));
+    expect(true)->toBe($gregorian->isLeapYear(-1));
+    expect(false)->toBe($gregorian->isLeapYear(1500));
+    expect(true)->toBe($gregorian->isLeapYear(1600));
+    expect(false)->toBe($gregorian->isLeapYear(1700));
+    expect(false)->toBe($gregorian->isLeapYear(1800));
+    expect(false)->toBe($gregorian->isLeapYear(1900));
+    expect(false)->toBe($gregorian->isLeapYear(1999));
+    expect(true)->toBe($gregorian->isLeapYear(2000));
+    expect(false)->toBe($gregorian->isLeapYear(2001));
+    expect(false)->toBe($gregorian->isLeapYear(2002));
+    expect(false)->toBe($gregorian->isLeapYear(2003));
+    expect(true)->toBe($gregorian->isLeapYear(2004));
+    expect(false)->toBe($gregorian->isLeapYear(2005));
+    expect(false)->toBe($gregorian->isLeapYear(2100));
+    expect(false)->toBe($gregorian->isLeapYear(2200));
+});
+test('easter days coverage', function () {
+    $gregorian = new GregorianCalendar;
 
-class GregorianCalendarTest extends TestCase
-{
-    /**
-     * Create the shim functions, so we can run tests on servers which do
-     * not have the ext/calendar library installed.  For example HHVM.
-     */
-    protected function setUp(): void
-    {
-        Shim::create();
+    foreach ([2037, 2035, 2030, 1981, 1894, 1875] as $year) {
+        expect(easter_days($year, \CAL_EASTER_ALWAYS_GREGORIAN))->toBe($gregorian->easterDays($year));
     }
+});
+test('easter days modern times', function () {
+    $gregorian = new GregorianCalendar;
 
-    /**
-     * Test the class constants.
-     *
-     * @coversNothing
-     */
-    public function testConstants(): void
-    {
-        $calendar = new GregorianCalendar;
-
-        $this->assertSame('@#DGREGORIAN@', $calendar->gedcomCalendarEscape());
-        $this->assertSame(1, $calendar->jdStart());
-        $this->assertSame(\PHP_INT_MAX, $calendar->jdEnd());
-        $this->assertSame(7, $calendar->daysInWeek());
-        $this->assertSame(12, $calendar->monthsInYear());
+    for ($year = 1970; $year <= 2037; ++$year) {
+        expect(easter_days($year, \CAL_EASTER_ALWAYS_GREGORIAN))->toBe($gregorian->easterDays($year));
     }
+});
+test('days in month', function () {
+    $gregorian = new GregorianCalendar;
 
-    /**
-     * Test the leap year calculations.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::isLeapYear
-     */
-    public function testIsLeapYear(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        $this->assertSame($gregorian->isLeapYear(-5), true);
-        $this->assertSame($gregorian->isLeapYear(-4), false);
-        $this->assertSame($gregorian->isLeapYear(-3), false);
-        $this->assertSame($gregorian->isLeapYear(-2), false);
-        $this->assertSame($gregorian->isLeapYear(-1), true);
-        $this->assertSame($gregorian->isLeapYear(1500), false);
-        $this->assertSame($gregorian->isLeapYear(1600), true);
-        $this->assertSame($gregorian->isLeapYear(1700), false);
-        $this->assertSame($gregorian->isLeapYear(1800), false);
-        $this->assertSame($gregorian->isLeapYear(1900), false);
-        $this->assertSame($gregorian->isLeapYear(1999), false);
-        $this->assertSame($gregorian->isLeapYear(2000), true);
-        $this->assertSame($gregorian->isLeapYear(2001), false);
-        $this->assertSame($gregorian->isLeapYear(2002), false);
-        $this->assertSame($gregorian->isLeapYear(2003), false);
-        $this->assertSame($gregorian->isLeapYear(2004), true);
-        $this->assertSame($gregorian->isLeapYear(2005), false);
-        $this->assertSame($gregorian->isLeapYear(2100), false);
-        $this->assertSame($gregorian->isLeapYear(2200), false);
-    }
-
-    /**
-     * Test the calculation of Easter against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::easterDays
-     */
-    public function testEasterDaysCoverage(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        foreach ([2037, 2035, 2030, 1981, 1894, 1875] as $year) {
-            $this->assertSame($gregorian->easterDays($year), easter_days($year, \CAL_EASTER_ALWAYS_GREGORIAN));
+    foreach ([-5, -4, -1, 1, 1500, 1600, 1700, 1800, 1900, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2100, 2200] as $year) {
+        for ($month = 1; $month <= 12; ++$month) {
+            expect(cal_days_in_month(\CAL_GREGORIAN, $month, $year))->toBe($gregorian->daysInMonth($year, $month));
         }
     }
+});
+test('ymd to jd days', function () {
+    $gregorian = new GregorianCalendar;
 
-    /**
-     * Test the calculation of Easter against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::easterDays
-     */
-    public function testEasterDaysModernTimes(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        for ($year = 1970; $year <= 2037; ++$year) {
-            $this->assertSame($gregorian->easterDays($year), easter_days($year, \CAL_EASTER_ALWAYS_GREGORIAN));
-        }
-    }
-
-    /**
-     * Test the calculation of the number of days in each month against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::daysInMonth
-     */
-    public function testDaysInMonth(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        foreach ([-5, -4, -1, 1, 1500, 1600, 1700, 1800, 1900, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2100, 2200] as $year) {
-            for ($month = 1; $month <= 12; ++$month) {
-                $this->assertSame($gregorian->daysInMonth($year, $month), cal_days_in_month(\CAL_GREGORIAN, $month, $year));
-            }
-        }
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::ymdToJd
-     */
-    public function testYmdToJdDays(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        foreach ([2012, 2014] as $year) {
-            for ($day = 1; $day <= 28; ++$day) {
-                $julian_day = gregoriantojd(8, $day, $year);
-                $ymd = $gregorian->jdToYmd($julian_day);
-
-                $this->assertSame($gregorian->ymdToJd($year, 8, $day), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtogregorian($julian_day));
-            }
-        }
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::ymdToJd
-     */
-    public function testYmdToJdMonths(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        foreach ([2012, 2014] as $year) {
-            for ($month = 1; $month <= 12; ++$month) {
-                $julian_day = gregoriantojd($month, 9, $year);
-                $ymd = $gregorian->jdToYmd($julian_day);
-
-                $this->assertSame($gregorian->ymdToJd($year, $month, 9), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtogregorian($julian_day));
-            }
-        }
-    }
-
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::ymdToJd
-     */
-    public function testYmdToJdYears(): void
-    {
-        $gregorian = new GregorianCalendar;
-
-        for ($year = 1970; $year <= 2037; ++$year) {
-            $julian_day = gregoriantojd(8, 9, $year);
+    foreach ([2012, 2014] as $year) {
+        for ($day = 1; $day <= 28; ++$day) {
+            $julian_day = gregoriantojd(8, $day, $year);
             $ymd = $gregorian->jdToYmd($julian_day);
 
-            $this->assertSame($gregorian->ymdToJd($year, 8, 9), $julian_day);
-            $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtogregorian($julian_day));
+            expect($julian_day)->toBe($gregorian->ymdToJd($year, 8, $day));
+            expect(jdtogregorian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('ymd to jd months', function () {
+    $gregorian = new GregorianCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days against the reference implementation.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::ymdToJd
-     */
-    public function testYmdToJdYearsBc(): void
-    {
-        $gregorian = new GregorianCalendar;
+    foreach ([2012, 2014] as $year) {
+        for ($month = 1; $month <= 12; ++$month) {
+            $julian_day = gregoriantojd($month, 9, $year);
+            $ymd = $gregorian->jdToYmd($julian_day);
 
-        for ($year = -5; $year <= 5; ++$year) {
-            if ($year != 0) {
-                $julian_day = gregoriantojd(1, 1, $year);
-                $ymd = $gregorian->jdToYmd($julian_day);
-
-                $this->assertSame($gregorian->ymdToJd($year, 1, 1), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtogregorian($julian_day));
-
-                $julian_day = gregoriantojd(12, 31, $year);
-                $ymd = $gregorian->jdToYmd($julian_day);
-
-                $this->assertSame($gregorian->ymdToJd($year, 12, 31), $julian_day);
-                $this->assertSame($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0], jdtogregorian($julian_day));
-            }
+            expect($julian_day)->toBe($gregorian->ymdToJd($year, $month, 9));
+            expect(jdtogregorian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('ymd to jd years', function () {
+    $gregorian = new GregorianCalendar;
 
-    /**
-     * Test the conversion of calendar dates into Julian days, and vice versa, returns the same result.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::jdToYmd
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::ymdToJd
-     */
-    public function testJdToYmdReciprocity(): void
-    {
-        $calendar = new GregorianCalendar;
+    for ($year = 1970; $year <= 2037; ++$year) {
+        $julian_day = gregoriantojd(8, 9, $year);
+        $ymd = $gregorian->jdToYmd($julian_day);
 
-        for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd += 79) {
-            [$y, $m, $d] = $calendar->jdToYmd($jd);
-            $this->assertSame($jd, $calendar->ymdToJd($y, $m, $d));
+        expect($julian_day)->toBe($gregorian->ymdToJd($year, 8, 9));
+        expect(jdtogregorian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
+    }
+});
+test('ymd to jd years bc', function () {
+    $gregorian = new GregorianCalendar;
+
+    for ($year = -5; $year <= 5; ++$year) {
+        if ($year != 0) {
+            $julian_day = gregoriantojd(1, 1, $year);
+            $ymd = $gregorian->jdToYmd($julian_day);
+
+            expect($julian_day)->toBe($gregorian->ymdToJd($year, 1, 1));
+            expect(jdtogregorian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
+
+            $julian_day = gregoriantojd(12, 31, $year);
+            $ymd = $gregorian->jdToYmd($julian_day);
+
+            expect($julian_day)->toBe($gregorian->ymdToJd($year, 12, 31));
+            expect(jdtogregorian($julian_day))->toBe($ymd[1] . '/' . $ymd[2] . '/' . $ymd[0]);
         }
     }
+});
+test('jd to ymd reciprocity', function () {
+    $calendar = new GregorianCalendar;
 
-    /**
-     * Test the conversion of a YMD date to JD when the month is not a valid number.
-     *
-     * @covers \Fisharebest\ExtCalendar\GregorianCalendar::ymdToJd
-     */
-    public function testYmdToJdInvalidMonth(): void
-    {
-        $this->expectExceptionMessage('Month 14 is invalid for this calendar');
-        $this->expectException('InvalidArgumentException');
-
-        $calendar = new GregorianCalendar;
-        $calendar->ymdToJd(4, 14, 1);
+    for ($jd = $calendar->jdStart(); $jd < min(2457755, $calendar->jdEnd()); $jd += 79) {
+        [$y, $m, $d] = $calendar->jdToYmd($jd);
+        expect($calendar->ymdToJd($y, $m, $d))->toBe($jd);
     }
-}
+});
+test('ymd to jd invalid month', function () {
+    $this->expectExceptionMessage('Month 14 is invalid for this calendar');
+    $this->expectException('InvalidArgumentException');
+
+    $calendar = new GregorianCalendar;
+    $calendar->ymdToJd(4, 14, 1);
+});
