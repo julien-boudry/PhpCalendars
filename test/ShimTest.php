@@ -45,8 +45,6 @@ class ShimTest extends TestCase
      * Test that the shim defines all the necessary constants.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testConstantsExist(): void
     {
@@ -99,8 +97,6 @@ class ShimTest extends TestCase
      * Test that the shim defines all the necessary functions.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testFunctionsExist(): void
     {
@@ -127,8 +123,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrench(): void
     {
@@ -143,8 +137,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchBug67976(): void
     {
@@ -155,8 +147,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchInvalidMonth1(): void
     {
@@ -170,8 +160,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchInvalidMonth2(): void
     {
@@ -185,8 +173,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchZeroYear1(): void
     {
@@ -200,8 +186,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchZeroYear2(): void
     {
@@ -215,8 +199,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchNegativeYear1(): void
     {
@@ -230,8 +212,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchNegativeYear2(): void
     {
@@ -245,8 +225,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchHighYear1(): void
     {
@@ -260,8 +238,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthFrenchHighYear2(): void
     {
@@ -277,8 +253,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
      *
      * @large
-     *
-     * @return void
      */
     public function testCalDaysInMonthGregorian(): void
     {
@@ -295,8 +269,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthGregorianInvalidMonth1(): void
     {
@@ -310,8 +282,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthGregorianInvalidMonth2(): void
     {
@@ -325,8 +295,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthGregorianInvalidYear1(): void
     {
@@ -340,8 +308,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthGregorianInvalidYear2(): void
     {
@@ -357,8 +323,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
      *
      * @large
-     *
-     * @return void
      */
     public function testCalDaysInMonthJulian(): void
     {
@@ -377,8 +341,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
      *
      * @large
-     *
-     * @return void
      */
     public function testCalDaysInMonthJewish(): void
     {
@@ -393,8 +355,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthJewishInvalidMonth1(): void
     {
@@ -408,8 +368,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthJewishInvalidMonth2(): void
     {
@@ -423,8 +381,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthJewishInvalidYear1(): void
     {
@@ -438,8 +394,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthJewishInvalidYear2(): void
     {
@@ -453,8 +407,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthJulianInvalidMonth1(): void
     {
@@ -468,8 +420,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthJulianInvalidMonth2(): void
     {
@@ -483,8 +433,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthJulianInvalidYear1(): void
     {
@@ -498,8 +446,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthJulianInvalidYear2(): void
     {
@@ -513,8 +459,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calDaysInMonth
-     *
-     * @return void
      */
     public function testCalDaysInMonthInvalidCalendar1(): void
     {
@@ -528,8 +472,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calDaysInMonth() against cal_days_in_month().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalDaysInMonthInvalidCalendar2(): void
     {
@@ -543,8 +485,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
-     *
-     * @return void
      */
     public function testCalFromJdFrench(): void
     {
@@ -562,8 +502,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
-     *
-     * @return void
      */
     public function testCalFromJdGregorian(): void
     {
@@ -581,8 +519,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
-     *
-     * @return void
      */
     public function testCalFromJdJewish(): void
     {
@@ -596,8 +532,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
-     *
-     * @return void
      */
     public function testCalFromJdJulian(): void
     {
@@ -615,8 +549,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
-     *
-     * @return void
      */
     public function testCalFromJdInvalidCalendar1(): void
     {
@@ -630,8 +562,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalFromJdInvalidCalendar2(): void
     {
@@ -645,8 +575,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calInfo() against cal_info().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calInfo
-     *
-     * @return void
      */
     public function testCalInfo(): void
     {
@@ -660,8 +588,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calInfo() against cal_info().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calInfo
-     *
-     * @return void
      */
     public function testCalInfoAll(): void
     {
@@ -672,8 +598,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calInfo() against cal_info().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calInfo
-     *
-     * @return void
      */
     public function testCalInfoInvalid1(): void
     {
@@ -687,8 +611,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calInfo() against cal_info().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalInfoInvalid2(): void
     {
@@ -702,8 +624,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calToJd() against cal_to_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calToJd
-     *
-     * @return void
      */
     public function testCalToJdInvalidCalendar1(): void
     {
@@ -717,8 +637,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calToJd() against cal_to_jd().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testCalToJdInvalidCalendar2(): void
     {
@@ -732,8 +650,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::easterDate() against easter_date().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::easterDate
-     *
-     * @return void
      */
     public function testEasterDate(): void
     {
@@ -745,8 +661,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::easterDate() against easter_date().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::easterDate
-     *
-     * @return void
      */
     public function testEasterDateHighYear1(): void
     {
@@ -757,8 +671,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::easterDate() against easter_date().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testEasterDateHighYear2(): void
     {
@@ -769,8 +681,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::easterDate() against easter_date().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::easterDate
-     *
-     * @return void
      */
     public function testEasterDateLowYear1(): void
     {
@@ -784,8 +694,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::easterDate() against easter_date().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testEasterDateLowYear2(): void
     {
@@ -799,8 +707,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::easterDays() against easter_days().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::easterDays
-     *
-     * @return void
      */
     public function testEasterDays(): void
     {
@@ -821,8 +727,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::frenchToJd
      *
      * @large
-     *
-     * @return void
      */
     public function testFrenchToJd(): void
     {
@@ -840,8 +744,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::frenchToJd() against FrenchToJd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::frenchToJd
-     *
-     * @return void
      */
     public function testFrenchToJdOutOfRange(): void
     {
@@ -856,8 +758,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::gregorianToJd
      *
      * @large
-     *
-     * @return void
      */
     public function testGregorianToJD(): void
     {
@@ -879,8 +779,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekSunday(): void
     {
@@ -903,8 +801,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekMonday(): void
     {
@@ -925,8 +821,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekTuesday(): void
     {
@@ -947,8 +841,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekWednesday(): void
     {
@@ -969,8 +861,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekThursday(): void
     {
@@ -991,8 +881,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekFriday(): void
     {
@@ -1013,8 +901,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
      *
      * @link https://bugs.php.net/bug.php?id=67960
-     *
-     * @return void
      */
     public function testJdDayOfWeekSaturday(): void
     {
@@ -1033,8 +919,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdDayOfWeek() against JDDayOfWeek().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
-     *
-     * @return void
      */
     public function testJdDayOfWeekNegative(): void
     {
@@ -1045,8 +929,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdDayOfWeek() against JDDayOfWeek().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
-     *
-     * @return void
      */
     public function testJdDayOfWeekInvalidMode(): void
     {
@@ -1060,8 +942,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdMonthName() against JDMonthName().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdMonthName
-     *
-     * @return void
      */
     public function testJdMonthNameFrench(): void
     {
@@ -1075,8 +955,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdMonthName() against JDMonthName().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdMonthName
-     *
-     * @return void
      */
     public function testJdMonthNameGregorian(): void
     {
@@ -1091,8 +969,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdMonthName() against JDMonthName().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdMonthName
-     *
-     * @return void
      */
     public function testJdMonthNameJewish(): void
     {
@@ -1109,8 +985,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdMonthName() against JDMonthName().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdMonthName
-     *
-     * @return void
      */
     public function testJdMonthNameJulian(): void
     {
@@ -1125,8 +999,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdMonthName() against JDMonthName().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdMonthName
-     *
-     * @return void
      */
     public function testJdMonthNameInvalidMode(): void
     {
@@ -1144,8 +1016,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdToFrench
      *
      * @large
-     *
-     * @return void
      */
     public function testJdToFrench(): void
     {
@@ -1161,8 +1031,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdToFrench() against JDToFrench().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToFrench
-     *
-     * @return void
      */
     public function testJdToFrenchEdgeCases(): void
     {
@@ -1189,8 +1057,6 @@ class ShimTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
      * @covers \Fisharebest\ExtCalendar\Shim::jdToFrench
-     *
-     * @return void
      */
     public function testJdToFrenchOutOfRange(): void
     {
@@ -1211,8 +1077,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdToGregorian
      *
      * @large
-     *
-     * @return void
      */
     public function testJdToGregorian(): void
     {
@@ -1229,8 +1093,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdToGregorian() against JDToGregorian().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToGregorian
-     *
-     * @return void
      */
     public function testJdToGregorianEdgeCases(): void
     {
@@ -1260,8 +1122,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJewish
      *
      * @large
-     *
-     * @return void
      */
     public function testJdToJewish(): void
     {
@@ -1280,8 +1140,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJewish
      *
      * @large
-     *
-     * @return void
      */
     public function testJdToJewishEdgeCases(): void
     {
@@ -1317,8 +1175,6 @@ class ShimTest extends TestCase
      * @large
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJewish
-     *
-     * @return void
      */
     public function testJdToJewishHebrew(): void
     {
@@ -1334,8 +1190,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJewish
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\WithoutErrorHandler]
     public function testJdToJewishHebrewOutOfRangeLow1(): void
@@ -1352,8 +1206,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testJdToJewishHebrewOutOfRangeLow2(): void
     {
@@ -1369,8 +1221,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJewish
-     *
-     * @return void
      */
     #[\PHPUnit\Framework\Attributes\WithoutErrorHandler]
     public function testJdToJewishHebrewOutOfRangeHigh1(): void
@@ -1386,8 +1236,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::calFromJd() against cal_from_jd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jewishToJd
-     *
-     * @return void
      */
     public function testJdToJewishHebrewOutOfRangeHigh2(): void
     {
@@ -1403,8 +1251,6 @@ class ShimTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calFromJd
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJulian
-     *
-     * @return void
      */
     public function testJdToJulian(): void
     {
@@ -1422,8 +1268,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdToJulian() against JDToJulian().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToJulian
-     *
-     * @return void
      */
     public function testJdToJulianEdgeCases(): void
     {
@@ -1456,8 +1300,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdToUnix() against jdtojunix().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToUnix
-     *
-     * @return void
      */
     public function testJdToUnix(): void
     {
@@ -1474,8 +1316,6 @@ class ShimTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToUnix
      * @covers \Fisharebest\ExtCalendar\Shim::jdToUnixUpperLimit
-     *
-     * @return void
      */
     public function testJdToUnixEdgeCasesLowerLimit(): void
     {
@@ -1495,8 +1335,6 @@ class ShimTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdToUnix
      * @covers \Fisharebest\ExtCalendar\Shim::jdToUnixUpperLimit
-     *
-     * @return void
      */
     public function testJdToUnixEdgeCasesUpperLimit(): void
     {
@@ -1519,8 +1357,6 @@ class ShimTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\Shim::jewishToJd
      *
      * @large
-     *
-     * @return void
      */
     public function testJewishToJd(): void
     {
@@ -1544,8 +1380,6 @@ class ShimTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\Shim::calToJd
      * @covers \Fisharebest\ExtCalendar\Shim::julianToJd
-     *
-     * @return void
      */
     public function testJulianToJd(): void
     {
@@ -1565,8 +1399,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::unixToJd() against unixtojd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::unixToJd
-     *
-     * @return void
      */
     public function testUnixToJd(): void
     {
@@ -1580,8 +1412,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::unixToJd() against unixtojd().
      *
      * @covers \Fisharebest\ExtCalendar\Shim::unixToJd
-     *
-     * @return void
      */
     public function testUnixToJdEdgeCases(): void
     {

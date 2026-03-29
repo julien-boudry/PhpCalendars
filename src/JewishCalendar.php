@@ -416,17 +416,14 @@ class JewishCalendar implements CalendarInterface
      */
     protected function addGereshayim(string $hebrew): string
     {
-        switch (\strlen($hebrew)) {
-            case 0:
-                // Zero, e.g. the zeros from the year 5,000
-                return $hebrew;
-            case 1:
-                // Single digit - append a geresh
-                return $hebrew . self::GERESH_ISO8859;
-            default:
-                // Multiple digits - insert a gershayim
-                return substr_replace($hebrew, self::GERSHAYIM_ISO8859, -1, 0);
-        }
+        return match (\strlen($hebrew)) {
+            // Zero, e.g. the zeros from the year 5,000
+            0 => $hebrew,
+            // Single digit - append a geresh
+            1 => $hebrew . self::GERESH_ISO8859,
+            // Multiple digits - insert a gershayim
+            default => substr_replace($hebrew, self::GERSHAYIM_ISO8859, -1, 0),
+        };
     }
 
     /**
@@ -464,7 +461,7 @@ class JewishCalendar implements CalendarInterface
         } else {
             $thousands = 0;
         }
-        $number = $number % 1000;
+        $number %= 1000;
 
         $hebrew = $this->numberToNumerals($number, self::$HEBREW_NUMERALS_UTF8);
 

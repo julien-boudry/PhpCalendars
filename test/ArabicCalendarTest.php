@@ -28,8 +28,6 @@ class ArabicCalendarTest extends TestCase
     /**
      * Create the shim functions, so we can run tests on servers which do
      * not have the ext/calendar library installed.  For example HHVM.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,8 +38,6 @@ class ArabicCalendarTest extends TestCase
      * Test the class constants.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testConstants(): void
     {
@@ -58,8 +54,6 @@ class ArabicCalendarTest extends TestCase
      * Test the leap year calculations.
      *
      * @covers \Fisharebest\ExtCalendar\ArabicCalendar::isLeapYear
-     *
-     * @return void
      */
     public function testIsLeapYear(): void
     {
@@ -101,8 +95,6 @@ class ArabicCalendarTest extends TestCase
      * Test the calculation of the number of days in each month.
      *
      * @covers \Fisharebest\ExtCalendar\ArabicCalendar::daysInMonth
-     *
-     * @return void
      */
     public function testDaysInMonth(): void
     {
@@ -139,8 +131,6 @@ class ArabicCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\ArabicCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\ArabicCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdTojd(): void
     {
@@ -203,8 +193,6 @@ class ArabicCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\ArabicCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\ArabicCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testJdToYmdReciprocity(): void
     {

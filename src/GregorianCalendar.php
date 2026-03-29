@@ -28,14 +28,13 @@ class GregorianCalendar extends JulianCalendar implements CalendarInterface
     /**
      * The escape sequence used to indicate this calendar in GEDCOM files.
      */
+    #[\Override]
     public function gedcomCalendarEscape(): string
     {
         return '@#DGREGORIAN@';
     }
 
-    /**
-     * @return bool
-     */
+    #[\Override]
     public function isLeapYear(int $year): bool
     {
         if ($year < 0) {
@@ -50,6 +49,7 @@ class GregorianCalendar extends JulianCalendar implements CalendarInterface
      *
      * @return int[]
      */
+    #[\Override]
     public function jdToYmd(int $julian_day): array
     {
         $a = $julian_day + 32044;
@@ -73,6 +73,7 @@ class GregorianCalendar extends JulianCalendar implements CalendarInterface
     /**
      * Convert a year/month/day into a Julian day number.
      */
+    #[\Override]
     public function ymdToJd(int $year, int $month, int $day): int
     {
         if ($month < 1 || $month > $this->monthsInYear()) {
@@ -95,6 +96,7 @@ class GregorianCalendar extends JulianCalendar implements CalendarInterface
      *
      * Uses the algorithm found in PHP’s ext/calendar/easter.c
      */
+    #[\Override]
     public function easterDays(int $year): int
     {
         // The “golden” number

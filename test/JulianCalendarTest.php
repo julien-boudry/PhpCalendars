@@ -28,8 +28,6 @@ class JulianCalendarTest extends TestCase
     /**
      * Create the shim functions, so we can run tests on servers which do
      * not have the ext/calendar library installed.  For example HHVM.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,8 +38,6 @@ class JulianCalendarTest extends TestCase
      * Test the class constants.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testConstants(): void
     {
@@ -58,8 +54,6 @@ class JulianCalendarTest extends TestCase
      * Test the leap year calculations.
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::isLeapYear
-     *
-     * @return void
      */
     public function testIsLeapYear(): void
     {
@@ -90,8 +84,6 @@ class JulianCalendarTest extends TestCase
      * Test the calculation of Easter against the reference implementation.
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::easterDays
-     *
-     * @return void
      */
     public function testEasterDaysCoverage(): void
     {
@@ -106,8 +98,6 @@ class JulianCalendarTest extends TestCase
      * Test the calculation of Easter against the reference implementation.
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::easterDays
-     *
-     * @return void
      */
     public function testEasterDaysModernTimes(): void
     {
@@ -122,8 +112,6 @@ class JulianCalendarTest extends TestCase
      * Test the calculation of the number of days in each month against the reference implementation.
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::daysInMonth
-     *
-     * @return void
      */
     public function testDaysInMonth(): void
     {
@@ -141,8 +129,6 @@ class JulianCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdDays(): void
     {
@@ -164,8 +150,6 @@ class JulianCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdMonths(): void
     {
@@ -187,8 +171,6 @@ class JulianCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdYears(): void
     {
@@ -208,8 +190,6 @@ class JulianCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdYearsBc(): void
     {
@@ -237,8 +217,6 @@ class JulianCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JulianCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testJdToYmdReciprocity(): void
     {

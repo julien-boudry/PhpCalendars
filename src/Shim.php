@@ -103,22 +103,13 @@ class Shim
      */
     public static function calDaysInMonth(int $calendar_id, int $month, int $year): int
     {
-        switch ($calendar_id) {
-            case \CAL_FRENCH:
-                return self::calDaysInMonthFrench($year, $month);
-
-            case \CAL_GREGORIAN:
-                return self::calDaysInMonthCalendar(self::$gregorian_calendar, $year, $month);
-
-            case \CAL_JEWISH:
-                return self::calDaysInMonthCalendar(self::$jewish_calendar, $year, $month);
-
-            case \CAL_JULIAN:
-                return self::calDaysInMonthCalendar(self::$julian_calendar, $year, $month);
-
-            default:
-                throw new ValueError('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID');
-        }
+        return match ($calendar_id) {
+            \CAL_FRENCH => self::calDaysInMonthFrench($year, $month),
+            \CAL_GREGORIAN => self::calDaysInMonthCalendar(self::$gregorian_calendar, $year, $month),
+            \CAL_JEWISH => self::calDaysInMonthCalendar(self::$jewish_calendar, $year, $month),
+            \CAL_JULIAN => self::calDaysInMonthCalendar(self::$julian_calendar, $year, $month),
+            default => throw new ValueError('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID'),
+        };
     }
 
     /**
@@ -128,7 +119,7 @@ class Shim
     {
         try {
             return $calendar->daysInMonth($year, $month);
-        } catch (InvalidArgumentException $ex) {
+        } catch (InvalidArgumentException) {
             throw new ValueError('Invalid date');
         }
     }
@@ -222,30 +213,19 @@ class Shim
      */
     public static function calInfo(int $calendar_id): array
     {
-        switch ($calendar_id) {
-            case \CAL_FRENCH:
-                return self::calInfoCalendar(self::$MONTH_NAMES_FRENCH, self::$MONTH_NAMES_FRENCH, 30, 'French', 'CAL_FRENCH');
-
-            case \CAL_GREGORIAN:
-                return self::calInfoCalendar(self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT, 31, 'Gregorian', 'CAL_GREGORIAN');
-
-            case \CAL_JEWISH:
-                return self::calInfoCalendar(self::$MONTH_NAMES_JEWISH_LEAP_YEAR, self::$MONTH_NAMES_JEWISH_LEAP_YEAR, 30, 'Jewish', 'CAL_JEWISH');
-
-            case \CAL_JULIAN:
-                return self::calInfoCalendar(self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT, 31, 'Julian', 'CAL_JULIAN');
-
-            case -1:
-                return [
-                    \CAL_GREGORIAN => self::calInfo(\CAL_GREGORIAN),
-                    \CAL_JULIAN    => self::calInfo(\CAL_JULIAN),
-                    \CAL_JEWISH    => self::calInfo(\CAL_JEWISH),
-                    \CAL_FRENCH    => self::calInfo(\CAL_FRENCH),
-                ];
-
-            default:
-                throw new ValueError('cal_info(): Argument #1 ($calendar) must be a valid calendar ID');
-        }
+        return match ($calendar_id) {
+            \CAL_FRENCH => self::calInfoCalendar(self::$MONTH_NAMES_FRENCH, self::$MONTH_NAMES_FRENCH, 30, 'French', 'CAL_FRENCH'),
+            \CAL_GREGORIAN => self::calInfoCalendar(self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT, 31, 'Gregorian', 'CAL_GREGORIAN'),
+            \CAL_JEWISH => self::calInfoCalendar(self::$MONTH_NAMES_JEWISH_LEAP_YEAR, self::$MONTH_NAMES_JEWISH_LEAP_YEAR, 30, 'Jewish', 'CAL_JEWISH'),
+            \CAL_JULIAN => self::calInfoCalendar(self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT, 31, 'Julian', 'CAL_JULIAN'),
+            -1 => [
+                \CAL_GREGORIAN => self::calInfo(\CAL_GREGORIAN),
+                \CAL_JULIAN    => self::calInfo(\CAL_JULIAN),
+                \CAL_JEWISH    => self::calInfo(\CAL_JEWISH),
+                \CAL_FRENCH    => self::calInfo(\CAL_FRENCH),
+            ],
+            default => throw new ValueError('cal_info(): Argument #1 ($calendar) must be a valid calendar ID'),
+        };
     }
 
     /**
@@ -276,22 +256,13 @@ class Shim
      */
     public static function calToJd(int $calendar_id, int $month, int $day, int $year): int
     {
-        switch ($calendar_id) {
-            case \CAL_FRENCH:
-                return self::frenchToJd($month, $day, $year);
-
-            case \CAL_GREGORIAN:
-                return self::gregorianToJd($month, $day, $year);
-
-            case \CAL_JEWISH:
-                return self::jewishToJd($month, $day, $year);
-
-            case \CAL_JULIAN:
-                return self::julianToJd($month, $day, $year);
-
-            default:
-                throw new ValueError('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID');
-        }
+        return match ($calendar_id) {
+            \CAL_FRENCH => self::frenchToJd($month, $day, $year),
+            \CAL_GREGORIAN => self::gregorianToJd($month, $day, $year),
+            \CAL_JEWISH => self::jewishToJd($month, $day, $year),
+            \CAL_JULIAN => self::julianToJd($month, $day, $year),
+            default => throw new ValueError('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID'),
+        };
     }
 
     /**
@@ -386,16 +357,12 @@ class Shim
             $day_of_week += 7;
         }
 
-        switch ($mode) {
-            case 1:
-                return self::$DAY_NAMES[$day_of_week];
-
-            case 2:
-                return self::$DAY_NAMES_SHORT[$day_of_week];
-
-            default: // CAL_DOW_DAYNO or anything else
-                return $day_of_week;
-        }
+        return match ($mode) {
+            1 => self::$DAY_NAMES[$day_of_week],
+            2 => self::$DAY_NAMES_SHORT[$day_of_week],
+            // CAL_DOW_DAYNO or anything else
+            default => $day_of_week,
+        };
     }
 
     /**
@@ -407,26 +374,14 @@ class Shim
      */
     public static function jdMonthName(int $julian_day, int $mode): string
     {
-        switch ($mode) {
-            case \CAL_MONTH_GREGORIAN_LONG:
-                return self::jdMonthNameCalendar(self::$gregorian_calendar, $julian_day, self::$MONTH_NAMES);
-
-            case \CAL_MONTH_JULIAN_LONG:
-                return self::jdMonthNameCalendar(self::$julian_calendar, $julian_day, self::$MONTH_NAMES);
-
-            case \CAL_MONTH_JULIAN_SHORT:
-                return self::jdMonthNameCalendar(self::$julian_calendar, $julian_day, self::$MONTH_NAMES_SHORT);
-
-            case \CAL_MONTH_JEWISH:
-                return self::jdMonthNameCalendar(self::$jewish_calendar, $julian_day, self::jdMonthNameJewishMonths($julian_day));
-
-            case \CAL_MONTH_FRENCH:
-                return self::jdMonthNameCalendar(self::$french_calendar, $julian_day, self::$MONTH_NAMES_FRENCH);
-
-            case \CAL_MONTH_GREGORIAN_SHORT:
-            default:
-                return self::jdMonthNameCalendar(self::$gregorian_calendar, $julian_day, self::$MONTH_NAMES_SHORT);
-        }
+        return match ($mode) {
+            \CAL_MONTH_GREGORIAN_LONG => self::jdMonthNameCalendar(self::$gregorian_calendar, $julian_day, self::$MONTH_NAMES),
+            \CAL_MONTH_JULIAN_LONG => self::jdMonthNameCalendar(self::$julian_calendar, $julian_day, self::$MONTH_NAMES),
+            \CAL_MONTH_JULIAN_SHORT => self::jdMonthNameCalendar(self::$julian_calendar, $julian_day, self::$MONTH_NAMES_SHORT),
+            \CAL_MONTH_JEWISH => self::jdMonthNameCalendar(self::$jewish_calendar, $julian_day, self::jdMonthNameJewishMonths($julian_day)),
+            \CAL_MONTH_FRENCH => self::jdMonthNameCalendar(self::$french_calendar, $julian_day, self::$MONTH_NAMES_FRENCH),
+            default => self::jdMonthNameCalendar(self::$gregorian_calendar, $julian_day, self::$MONTH_NAMES_SHORT),
+        };
     }
 
     /**

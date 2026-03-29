@@ -116,7 +116,7 @@ class PersianCalendar implements CalendarInterface
         $month = (int) (($yday <= 186) ? ceil($yday / 31) : ceil(($yday - 6) / 30));
         $day   = $julian_day - $this->ymdToJd($year, $month, 1) + 1;
 
-        return [(int) $year, (int) $month, (int) $day];
+        return [$year, $month, $day];
     }
 
     /**

@@ -13,11 +13,8 @@ $rectorLevel = 17;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/Benchmarks',
-        __DIR__ . '/Dev',
-        __DIR__ . '/Examples',
         __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__ . '/test',
     ])
     // uncomment to reach your current PHP version
     ->withIndent(indentChar: ' ', indentSize: 4)

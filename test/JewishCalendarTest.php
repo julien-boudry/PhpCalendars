@@ -30,8 +30,6 @@ class JewishCalendarTest extends TestCase
 
     /**
      * Make sure we emulate the correct version of ext/calendar.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -43,8 +41,6 @@ class JewishCalendarTest extends TestCase
      * Test the class constants.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testConstants(): void
     {
@@ -58,8 +54,6 @@ class JewishCalendarTest extends TestCase
      * Test the leap year calculations.
      *
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::monthsInYear
-     *
-     * @return void
      */
     public function testMonthsInYear(): void
     {
@@ -72,8 +66,6 @@ class JewishCalendarTest extends TestCase
      * Test the leap year calculations.
      *
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::isLeapYear
-     *
-     * @return void
      */
     public function testIsLeapYear(): void
     {
@@ -102,8 +94,6 @@ class JewishCalendarTest extends TestCase
      * Test the calculation of month lengths against the reference implementation.
      *
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::daysInMonth
-     *
-     * @return void
      */
     public function testDaysInMonth(): void
     {
@@ -121,8 +111,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::yToJd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdDays(): void
     {
@@ -144,8 +132,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::yToJd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdMonths(): void
     {
@@ -173,8 +159,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::ymdToJd
      *
      * @medium This test may take several seconds to run.
-     *
-     * @return void
      */
     public function testYmdToJdYears(): void
     {
@@ -194,8 +178,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::yToJd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdYearsHistoric(): void
     {
@@ -220,8 +202,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToHebrew
      *
      * @large This test can take several seconds to run.
-     *
-     * @return void
      */
     public function testJdToHebrewYear(): void
     {
@@ -255,8 +235,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToHebrew
      *
      * @large This test can take several seconds to run.
-     *
-     * @return void
      */
     public function testJdToHebrewDay(): void
     {
@@ -281,8 +259,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToHebrew
      *
      * @large This test can take several seconds to run.
-     *
-     * @return void
      */
     public function testJdToHebrewMonth(): void
     {
@@ -308,8 +284,6 @@ class JewishCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testJdToYmdReciprocity(): void
     {
@@ -327,8 +301,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::numberToHebrewNumerals
      *
      * @large This test can take several seconds to run.
-     *
-     * @return void
      */
     public function testNumberToHebrewNumeralsShort(): void
     {
@@ -1079,8 +1051,6 @@ class JewishCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\JewishCalendar::numberToHebrewNumerals
      *
      * @large This test can take several seconds to run.
-     *
-     * @return void
      */
     public function testNumberToHebrewNumeralsLong(): void
     {

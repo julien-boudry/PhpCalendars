@@ -28,8 +28,6 @@ class FrenchCalendarTest extends TestCase
     /**
      * Create the shim functions, so we can run tests on servers which do
      * not have the ext/calendar library installed.  For example HHVM.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,8 +38,6 @@ class FrenchCalendarTest extends TestCase
      * Test the class constants.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testConstants(): void
     {
@@ -58,8 +54,6 @@ class FrenchCalendarTest extends TestCase
      * Test the leap year calculations.
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::isLeapYear
-     *
-     * @return void
      */
     public function testIsLeapYear(): void
     {
@@ -85,8 +79,6 @@ class FrenchCalendarTest extends TestCase
      * Test the calculation of the number of days in each month against the reference implementation.
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::daysInMonth
-     *
-     * @return void
      */
     public function testDaysInMonth(): void
     {
@@ -105,8 +97,6 @@ class FrenchCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdTojd(): void
     {
@@ -124,8 +114,6 @@ class FrenchCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdDays(): void
     {
@@ -147,8 +135,6 @@ class FrenchCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdMonths(): void
     {
@@ -174,8 +160,6 @@ class FrenchCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testYmdToJdYears(): void
     {
@@ -195,8 +179,6 @@ class FrenchCalendarTest extends TestCase
      *
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\FrenchCalendar::ymdToJd
-     *
-     * @return void
      */
     public function testJdToYmdReciprocity(): void
     {

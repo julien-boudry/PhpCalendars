@@ -50,11 +50,8 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $calendar_id
      * @param int $month
      * @param int $year
-     *
-     * @return int
      */
-
-    function cal_days_in_month($calendar_id, $month, $year)
+    function cal_days_in_month($calendar_id, $month, $year): int
     {
         return Shim::calDaysInMonth($calendar_id, $month, $year);
     }
@@ -85,20 +82,16 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $month
      * @param int $day
      * @param int $year
-     *
-     * @return int
      */
-    function cal_to_jd($calendar_id, $month, $day, $year)
+    function cal_to_jd($calendar_id, $month, $day, $year): int
     {
         return Shim::calToJd($calendar_id, $month, $day, $year);
     }
 
     /**
      * @param int|null $year
-     *
-     * @return int
      */
-    function easter_date($year = null)
+    function easter_date($year = null): int
     {
         return Shim::easterDate($year ?: (int) date('Y'));
     }
@@ -106,10 +99,8 @@ if (!\defined('CAL_GREGORIAN')) {
     /**
      * @param int|null $year
      * @param int      $method
-     *
-     * @return int
      */
-    function easter_days($year = null, $method = \CAL_EASTER_DEFAULT)
+    function easter_days($year = null, $method = \CAL_EASTER_DEFAULT): int
     {
         return Shim::easterDays($year ?: (int) date('Y'), $method);
     }
@@ -118,10 +109,8 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $month
      * @param int $day
      * @param int $year
-     *
-     * @return int
      */
-    function FrenchToJD($month, $day, $year)
+    function FrenchToJD($month, $day, $year): int
     {
         return Shim::frenchToJd($month, $day, $year);
     }
@@ -130,10 +119,8 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $month
      * @param int $day
      * @param int $year
-     *
-     * @return int
      */
-    function GregorianToJD($month, $day, $year)
+    function GregorianToJD($month, $day, $year): int
     {
         return Shim::gregorianToJd($month, $day, $year);
     }
@@ -152,30 +139,24 @@ if (!\defined('CAL_GREGORIAN')) {
     /**
      * @param int $julian_day
      * @param int $mode
-     *
-     * @return string
      */
-    function JDMonthName($julian_day, $mode)
+    function JDMonthName($julian_day, $mode): string
     {
         return Shim::jdMonthName($julian_day, $mode);
     }
 
     /**
      * @param int $julian_day
-     *
-     * @return string
      */
-    function JDToFrench($julian_day)
+    function JDToFrench($julian_day): string
     {
         return Shim::jdToFrench($julian_day);
     }
 
     /**
      * @param int $julian_day
-     *
-     * @return string
      */
-    function JDToGregorian($julian_day)
+    function JDToGregorian($julian_day): string
     {
         return Shim::jdToGregorian($julian_day);
     }
@@ -184,30 +165,24 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $julian_day
      * @param bool $hebrew
      * @param int $flags
-     *
-     * @return string
      */
-    function jdtojewish($julian_day, $hebrew = false, $flags = 0)
+    function jdtojewish($julian_day, $hebrew = false, $flags = 0): string
     {
         return Shim::jdToJewish($julian_day, $hebrew, $flags);
     }
 
     /**
      * @param int $julian_day
-     *
-     * @return string
      */
-    function JDToJulian($julian_day)
+    function JDToJulian($julian_day): string
     {
         return Shim::jdToJulian($julian_day);
     }
 
     /**
      * @param int $julian_day
-     *
-     * @return int
      */
-    function jdtounix($julian_day)
+    function jdtounix($julian_day): int
     {
         return Shim::jdToUnix($julian_day);
     }
@@ -216,10 +191,8 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $month
      * @param int $day
      * @param int $year
-     *
-     * @return int
      */
-    function JewishToJD($month, $day, $year)
+    function JewishToJD($month, $day, $year): int
     {
         return Shim::jewishToJd($month, $day, $year);
     }
@@ -228,20 +201,16 @@ if (!\defined('CAL_GREGORIAN')) {
      * @param int $month
      * @param int $day
      * @param int $year
-     *
-     * @return int
      */
-    function JulianToJD($month, $day, $year)
+    function JulianToJD($month, $day, $year): int
     {
         return Shim::julianToJd($month, $day, $year);
     }
 
     /**
      * @param int|null $timestamp
-     *
-     * @return int
      */
-    function unixtojd($timestamp = null)
+    function unixtojd($timestamp = null): int
     {
         return Shim::unixToJd($timestamp ?: time());
     }

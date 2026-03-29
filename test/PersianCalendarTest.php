@@ -28,8 +28,6 @@ class PersianCalendarTest extends TestCase
     /**
      * Create the shim functions, so we can run tests on servers which do
      * not have the ext/calendar library installed.  For example HHVM.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -40,8 +38,6 @@ class PersianCalendarTest extends TestCase
      * Test the class constants.
      *
      * @coversNothing
-     *
-     * @return void
      */
     public function testConstants(): void
     {
@@ -58,8 +54,6 @@ class PersianCalendarTest extends TestCase
      * Test the leap year calculations.
      *
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::isLeapYear
-     *
-     * @return void
      */
     public function testIsLeapYear(): void
     {
@@ -199,8 +193,6 @@ class PersianCalendarTest extends TestCase
      * Test the calculation of the number of days in each month.
      *
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::daysInMonth
-     *
-     * @return void
      */
     public function testDaysInMonth(): void
     {
@@ -238,8 +230,6 @@ class PersianCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::ymdToJd
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::mod
-     *
-     * @return void
      */
     public function testYmdTojd(): void
     {
@@ -305,8 +295,6 @@ class PersianCalendarTest extends TestCase
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::jdToYmd
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::ymdToJd
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::mod
-     *
-     * @return void
      */
     public function testJdToYmdReciprocity(): void
     {
@@ -334,8 +322,6 @@ class PersianCalendarTest extends TestCase
 
     /**
      * @covers \Fisharebest\ExtCalendar\PersianCalendar::mod
-     *
-     * @return void
      */
     public function testModFunction(): void
     {
