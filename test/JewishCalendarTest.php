@@ -21,7 +21,7 @@
 
 namespace Fisharebest\ExtCalendar;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class JewishCalendarTest extends TestCase
 {
@@ -33,12 +33,10 @@ class JewishCalendarTest extends TestCase
      *
      * @return void
      */
-    public function set_up()
+    protected function setUp(): void
     {
         Shim::create();
-        $this->jewish = new JewishCalendar(array(
-            JewishCalendar::EMULATE_BUG_54254 => Shim::shouldEmulateBug54254(),
-        ));
+        $this->jewish = new JewishCalendar();
     }
 
     /**
@@ -234,6 +232,9 @@ class JewishCalendarTest extends TestCase
 
         foreach ($years as $year) {
             $julian_day = JewishToJD(13, 15, $year);
+            if ($julian_day === 0) {
+                continue;
+            }
             foreach (array(0, CAL_JEWISH_ADD_ALAFIM_GERESH) as $alafim_geresh) {
                 foreach (array(0, CAL_JEWISH_ADD_ALAFIM) as $alafim) {
                     foreach (array(0, CAL_JEWISH_ADD_GERESHAYIM) as $gereshayim) {

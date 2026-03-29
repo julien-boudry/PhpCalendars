@@ -87,12 +87,6 @@ class Shim
         'Adar II', 'Nisan', 'Iyyar', 'Sivan', 'Tammuz', 'Av', 'Elul',
     );
 
-    /** @var string[] Names of the months of the Jewish calendar (before PHP bug 54254 was fixed) */
-    private static $MONTH_NAMES_JEWISH_54254 = array(
-        '', 'Tishri', 'Heshvan', 'Kislev', 'Tevet', 'Shevat', 'AdarI',
-        'AdarII', 'Nisan', 'Iyyar', 'Sivan', 'Tammuz', 'Av', 'Elul',
-    );
-
     /**
      * Create the necessary shims to emulate the ext/calendar package.
      *
@@ -102,60 +96,8 @@ class Shim
     {
         self::$french_calendar    = new FrenchCalendar();
         self::$gregorian_calendar = new GregorianCalendar();
-        self::$jewish_calendar    = new JewishCalendar(array(
-            JewishCalendar::EMULATE_BUG_54254 => self::shouldEmulateBug54254(),
-        ));
+        self::$jewish_calendar    = new JewishCalendar();
         self::$julian_calendar    = new JulianCalendar();
-    }
-
-    /**
-     * Do we need to emulate PHP bug #54254?
-     *
-     * This bug relates to the names used for months 6 and 7 in the Jewish calendar.
-     *
-     * It was fixed in PHP 5.5.0
-     *
-     * @link https://bugs.php.net/bug.php?id=54254
-     *
-     * @return bool
-     */
-    public static function shouldEmulateBug54254()
-    {
-        return PHP_VERSION_ID < 50500;
-    }
-
-    /**
-     * Do we need to emulate PHP bug #67960?
-     *
-     * This bug relates to the constants CAL_DOW_SHORT and CAL_DOW_LONG.
-     *
-     * It was fixed in PHP 5.6.5 and 5.5.21
-     *
-     * @link https://bugs.php.net/bug.php?id=67960
-     * @link https://github.com/php/php-src/pull/806
-     *
-     * @return bool
-     */
-    public static function shouldEmulateBug67960()
-    {
-        return PHP_VERSION_ID < 50521 || PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < 50605;
-    }
-
-    /**
-     * Do we need to emulate PHP bug #67976?
-     *
-     * This bug relates to the number of days in the month 13 of year 14 in
-     * the French calendar.
-     *
-     * It was fixed in PHP 5.6.25 and 7.0.10
-     *
-     * @link https://bugs.php.net/bug.php?id=67976
-     *
-     * @return bool
-     */
-    public static function shouldEmulateBug67976()
-    {
-        return PHP_VERSION_ID < 50625 || PHP_VERSION_ID >= 70000 && PHP_VERSION_ID < 70010;
     }
 
     /**
@@ -191,10 +133,6 @@ class Shim
                 return self::calDaysInMonthCalendar(self::$julian_calendar, $year, $month);
 
             default:
-                if (PHP_VERSION_ID < 80000) {
-                    return trigger_error('invalid calendar ID ' . $calendar_id, E_USER_WARNING);
-                }
-
                 throw new ValueError('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID');
         }
     }
@@ -213,13 +151,6 @@ class Shim
         try {
             return $calendar->daysInMonth($year, $month);
         } catch (InvalidArgumentException $ex) {
-            if (PHP_VERSION_ID < 70200) {
-                return trigger_error('invalid date.', E_USER_WARNING);
-            }
-            if (PHP_VERSION_ID < 80000) {
-                return trigger_error('invalid date', E_USER_WARNING);
-            }
-
             throw new ValueError('Invalid date');
         }
     }
@@ -236,18 +167,7 @@ class Shim
      */
     private static function calDaysInMonthFrench($year, $month)
     {
-        if ($month == 13 && $year == 14 && self::shouldEmulateBug67976()) {
-            return -2380948;
-        }
-
         if ($year > 14) {
-            if (PHP_VERSION_ID < 70200) {
-                return trigger_error('invalid date.', E_USER_WARNING);
-            }
-            if (PHP_VERSION_ID < 80000) {
-                return trigger_error('invalid date', E_USER_WARNING);
-            }
-
             throw new ValueError('Invalid date');
         }
 
@@ -282,7 +202,7 @@ class Shim
 
                 $cal = self::calFromJdCalendar($julian_day, self::jdToCalendar(self::$jewish_calendar, $julian_day, 347998, 324542846), $months, $months);
 
-                if (($julian_day < 347998 || $julian_day > 324542846) && !self::shouldEmulateBug67976()) {
+                if ($julian_day < 347998 || $julian_day > 324542846) {
                     $cal['dow'] = null;
                     $cal['dayname'] = '';
                     $cal['abbrevdayname'] = '';
@@ -294,10 +214,6 @@ class Shim
                 return self::calFromJdCalendar($julian_day, self::jdToJulian($julian_day), self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT);
 
             default:
-                if (PHP_VERSION_ID < 80000) {
-                    return trigger_error('invalid calendar ID ' . $calendar_id, E_USER_WARNING);
-                }
-
                 throw new ValueError('cal_from_jd(): Argument #2 ($calendar) must be a valid calendar ID');
         }
     }
@@ -350,9 +266,7 @@ class Shim
                 return self::calInfoCalendar(self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT, 31, 'Gregorian', 'CAL_GREGORIAN');
 
             case CAL_JEWISH:
-                $months = self::shouldEmulateBug54254() ? self::$MONTH_NAMES_JEWISH_54254 : self::$MONTH_NAMES_JEWISH_LEAP_YEAR;
-
-                return self::calInfoCalendar($months, $months, 30, 'Jewish', 'CAL_JEWISH');
+                return self::calInfoCalendar(self::$MONTH_NAMES_JEWISH_LEAP_YEAR, self::$MONTH_NAMES_JEWISH_LEAP_YEAR, 30, 'Jewish', 'CAL_JEWISH');
 
             case CAL_JULIAN:
                 return self::calInfoCalendar(self::$MONTH_NAMES, self::$MONTH_NAMES_SHORT, 31, 'Julian', 'CAL_JULIAN');
@@ -366,10 +280,6 @@ class Shim
                 );
 
             default:
-                if (PHP_VERSION_ID < 80000) {
-                    return trigger_error('invalid calendar ID ' . $calendar_id, E_USER_WARNING);
-                }
-
                 throw new ValueError('cal_info(): Argument #1 ($calendar) must be a valid calendar ID');
         }
     }
@@ -430,10 +340,6 @@ class Shim
                 return self::julianToJd($month, $day, $year);
 
             default:
-                if (PHP_VERSION_ID < 80000) {
-                    return trigger_error('invalid calendar ID ' . $calendar_id, E_USER_WARNING);
-                }
-
                 throw new ValueError('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID');
         }
     }
@@ -453,24 +359,17 @@ class Shim
     {
         $year = (int) $year;
 
-        if ($year < 1970 || $year > 2037) {
-            if (PHP_VERSION_ID >= 80000) {
-                throw new ValueError('easter_date(): Argument #1 ($year) must be between 1970 and 2037 (inclusive)');
-            }
-            return trigger_error('This function is only valid for years between 1970 and 2037 inclusive', E_USER_WARNING);
+        if ($year < 1970) {
+            throw new ValueError('easter_date(): Argument #1 ($year) must be a year after 1970 (inclusive)');
         }
 
         $days = self::$gregorian_calendar->easterDays($year);
 
-        // Calculate time-zone offset
-        $date_time      = new \DateTime('now', new \DateTimeZone(date_default_timezone_get()));
-        $offset_seconds = (int) $date_time->format('Z');
-
         if ($days < 11) {
-            return self::jdtounix(self::$gregorian_calendar->ymdToJd($year, 3, $days + 21)) - $offset_seconds;
+            return mktime(0, 0, 0, 3, $days + 21, $year);
         }
 
-        return self::jdtounix(self::$gregorian_calendar->ymdToJd($year, 4, $days - 10)) - $offset_seconds;
+        return mktime(0, 0, 0, 4, $days - 10, $year);
     }
 
     /**
@@ -489,6 +388,10 @@ class Shim
     {
         $year   = (int) $year;
         $method = (int) $method;
+
+        if ($year < 1) {
+            throw new ValueError('easter_days(): Argument #1 ($year) must be between 1 and ' . PHP_INT_MAX);
+        }
 
         if (
             $method === CAL_EASTER_ALWAYS_JULIAN ||
@@ -654,10 +557,10 @@ class Shim
         list(, , $year) = explode('/', self::jdToCalendar(self::$jewish_calendar, $julian_day, 347998, 324542846));
 
         if (self::$jewish_calendar->isLeapYear($year)) {
-            return self::shouldEmulateBug54254() ? self::$MONTH_NAMES_JEWISH_54254 : self::$MONTH_NAMES_JEWISH_LEAP_YEAR;
+            return self::$MONTH_NAMES_JEWISH_LEAP_YEAR;
         }
 
-        return self::shouldEmulateBug54254() ? self::$MONTH_NAMES_JEWISH_54254 : self::$MONTH_NAMES_JEWISH;
+        return self::$MONTH_NAMES_JEWISH;
     }
 
     /**
@@ -719,7 +622,7 @@ class Shim
         $julian_day = (int) $julian_day;
 
         // PHP has different limits on 32 and 64 bit systems.
-        $MAX_JD = PHP_INT_SIZE === 4 ? 536838866 : 2305843009213661906;
+        $MAX_JD = PHP_INT_SIZE === 4 ? 536838866 : 784350656097;
 
         return self::jdToCalendar(self::$gregorian_calendar, $julian_day, 1, $MAX_JD);
     }
@@ -741,9 +644,7 @@ class Shim
     {
         if ($hebrew) {
             if ($julian_day < 347998 || $julian_day > 4000075) {
-                $error_msg = PHP_VERSION_ID < 70200 ? 'Year out of range (0-9999).' : 'Year out of range (0-9999)';
-
-                return trigger_error($error_msg, E_USER_WARNING);
+                return trigger_error('Year out of range (0-9999)', E_USER_WARNING);
             }
 
             return self::$jewish_calendar->jdToHebrew(
@@ -788,7 +689,7 @@ class Shim
      *
      * @param int $julian_day
      *
-     * @return int|false
+     * @return int
      * @throws ValueError
      */
     public static function jdToUnix($julian_day)
@@ -799,10 +700,6 @@ class Shim
 
         if ($julian_day >= 2440588 && $julian_day <= $upper_limit) {
             return ($julian_day - 2440588) * 86400;
-        }
-
-        if (PHP_VERSION_ID < 80000) {
-            return false;
         }
 
         throw new ValueError('jday must be between 2440588 and ' . $upper_limit);
@@ -817,7 +714,7 @@ class Shim
      */
     public static function jdToUnixUpperLimit()
     {
-        if (PHP_INT_SIZE === 2 || PHP_VERSION_ID < 70324 || PHP_VERSION_ID >= 70400 && PHP_VERSION_ID < 70412) {
+        if (PHP_INT_SIZE === 2) {
             return 2465343;
         }
 
@@ -843,7 +740,7 @@ class Shim
         $month = (int) $month;
         $year  = (int) $year;
 
-        if ($year <= 0) {
+        if ($year <= 0 || $year >= 6000) {
             return 0;
         }
 
@@ -885,21 +782,16 @@ class Shim
      *
      * @param int $timestamp
      *
-     * @return false|int
+     * @return int
      */
     public static function unixToJd($timestamp)
     {
         $timestamp = (int) $timestamp;
 
         if ($timestamp < 0) {
-            if (PHP_VERSION_ID < 80000) {
-                return false;
-            }
-
             throw new ValueError('unixtojd(): Argument #1 ($timestamp) must be greater than or equal to 0');
         }
 
-        // Convert timestamp based on local timezone
-        return self::GregorianToJd(gmdate('n', $timestamp), gmdate('j', $timestamp), gmdate('Y', $timestamp));
+        return self::GregorianToJd((int) date('n', $timestamp), (int) date('j', $timestamp), (int) date('Y', $timestamp));
     }
 }

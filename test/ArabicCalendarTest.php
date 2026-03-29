@@ -21,7 +21,7 @@
 
 namespace Fisharebest\ExtCalendar;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ArabicCalendarTest extends TestCase
 {
@@ -31,7 +31,7 @@ class ArabicCalendarTest extends TestCase
      *
      * @return void
      */
-    public function set_up()
+    protected function setUp(): void
     {
         Shim::create();
     }

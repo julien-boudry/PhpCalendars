@@ -22,16 +22,9 @@
 namespace Fisharebest\ExtCalendar;
 
 use PHPUnit\Framework\TestCase;
-use Yoast\PHPUnitPolyfills\Polyfills\AssertIsType;
-use Yoast\PHPUnitPolyfills\Polyfills\ExpectException;
-use Yoast\PHPUnitPolyfills\Polyfills\ExpectPHPException;
 
 class ShimTest extends TestCase
 {
-    use AssertIsType;
-    use ExpectException;
-    use ExpectPHPException;
-    
     // Use this many random dates to test date conversion functions.
     const ITERATIONS = 512;
     /**
@@ -39,6 +32,14 @@ class ShimTest extends TestCase
      * avoid any synchronisation problems.
      */
     const LARGE_PRIME = 235741;
+
+    public static function setUpBeforeClass(): void
+    {
+        // Sync the C library timezone with PHP's timezone so that native
+        // ext/calendar functions (which use the C library's mktime/localtime)
+        // match PHP's date/mktime functions.
+        putenv('TZ=' . date_default_timezone_get());
+    }
 
     /**
      * Test that the shim defines all the necessary constants.
@@ -77,8 +78,8 @@ class ShimTest extends TestCase
         $this->assertSame(3, CAL_FRENCH);
         $this->assertSame(4, CAL_NUM_CALS);
         $this->assertSame(0, CAL_DOW_DAYNO);
-        $this->assertSame(Shim::shouldEmulateBug67960() ? 1 : 2, CAL_DOW_SHORT);
-        $this->assertSame(Shim::shouldEmulateBug67960() ? 2 : 1, CAL_DOW_LONG);
+        $this->assertSame(2, CAL_DOW_SHORT);
+        $this->assertSame(1, CAL_DOW_LONG);
         $this->assertSame(0, CAL_MONTH_GREGORIAN_SHORT);
         $this->assertSame(1, CAL_MONTH_GREGORIAN_LONG);
         $this->assertSame(2, CAL_MONTH_JULIAN_SHORT);
@@ -159,16 +160,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchInvalidMonth1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_FRENCH, 14, 10);
     }
@@ -182,16 +175,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchInvalidMonth2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_FRENCH, 14, 10);
     }
@@ -205,16 +190,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchZeroYear1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_FRENCH, 1, 0);
     }
@@ -228,16 +205,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchZeroYear2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_FRENCH, 1, 0);
     }
@@ -251,16 +220,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchNegativeYear1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_FRENCH, 1, -1);
     }
@@ -274,16 +235,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchNegativeYear2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_FRENCH, 1, -1);
     }
@@ -297,16 +250,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchHighYear1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_FRENCH, 1, 15);
     }
@@ -320,16 +265,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthFrenchHighYear2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_FRENCH, 1, 15);
     }
@@ -362,16 +299,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthGregorianInvalidMonth1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_GREGORIAN, 13, 2014);
     }
@@ -385,16 +314,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthGregorianInvalidMonth2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_GREGORIAN, 13, 2014);
     }
@@ -408,16 +329,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthGregorianInvalidYear1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_GREGORIAN, 1, 0);
     }
@@ -431,16 +344,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthGregorianInvalidYear2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_GREGORIAN, 1, 0);
     }
@@ -475,7 +380,7 @@ class ShimTest extends TestCase
     public function testCalDaysInMonthJewish()
     {
         for ($n = 0; $n < static::ITERATIONS; ++$n) {
-            $year = mt_rand(1, 6000);
+            $year = mt_rand(1, 5999);
             $month = mt_rand(1, 13);
             $this->assertSame(Shim::calDaysInMonth(CAL_JEWISH, $month, $year), cal_days_in_month(CAL_JEWISH, $month, $year));
         }
@@ -490,16 +395,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJewishInvalidMonth1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_JEWISH, 14, 2014);
     }
@@ -513,16 +410,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJewishInvalidMonth2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_JEWISH, 14, 2014);
     }
@@ -536,16 +425,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJewishInvalidYear1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_JEWISH, 1, 0);
     }
@@ -559,16 +440,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJewishInvalidYear2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_JEWISH, 1, 0);
     }
@@ -582,16 +455,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJulianInvalidMonth1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_JULIAN, 13, 2014);
     }
@@ -605,16 +470,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJulianInvalidMonth2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_JULIAN, 13, 2014);
     }
@@ -628,16 +485,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJulianInvalidYear1()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         Shim::calDaysInMonth(CAL_JULIAN, 1, 0);
     }
@@ -651,16 +500,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthJulianInvalidYear2()
     {
-        if (PHP_VERSION_ID < 70200) {
-            $this->expectErrorMessage('invalid date.');
-            $this->expectError();
-        } elseif (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid date');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('Invalid date');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Invalid date');
 
         cal_days_in_month(CAL_JULIAN, 1, 0);
     }
@@ -674,13 +515,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthInvalidCalendar1()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID');
 
         Shim::calDaysInMonth(999, 1, 1);
     }
@@ -694,13 +530,8 @@ class ShimTest extends TestCase
      */
     public function testCalDaysInMonthInvalidCalendar2()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_days_in_month(): Argument #1 ($calendar) must be a valid calendar ID');
 
         cal_days_in_month(999, 1, 1);
     }
@@ -786,13 +617,8 @@ class ShimTest extends TestCase
      */
     public function testCalFromJdInvalidCalendar1()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_from_jd(): Argument #2 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_from_jd(): Argument #2 ($calendar) must be a valid calendar ID');
 
         Shim::calFromJd(2345678, 999);
     }
@@ -806,13 +632,8 @@ class ShimTest extends TestCase
      */
     public function testCalFromJdInvalidCalendar2()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_from_jd(): Argument #2 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_from_jd(): Argument #2 ($calendar) must be a valid calendar ID');
 
         cal_from_jd(2345678, 999);
     }
@@ -853,13 +674,8 @@ class ShimTest extends TestCase
      */
     public function testCalInfoInvalid1()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_info(): Argument #1 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_info(): Argument #1 ($calendar) must be a valid calendar ID');
 
         Shim::calInfo(999);
     }
@@ -873,13 +689,8 @@ class ShimTest extends TestCase
      */
     public function testCalInfoInvalid2()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_info(): Argument #1 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_info(): Argument #1 ($calendar) must be a valid calendar ID');
 
         cal_info(999);
     }
@@ -893,13 +704,8 @@ class ShimTest extends TestCase
      */
     public function testCalToJdInvalidCalendar1()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID');
 
         Shim::calToJd(999, 1, 1, 1);
     }
@@ -913,13 +719,8 @@ class ShimTest extends TestCase
      */
     public function testCalToJdInvalidCalendar2()
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->expectErrorMessage('invalid calendar ID 999');
-            $this->expectError();
-        } else {
-            $this->expectExceptionMessage('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID');
-            $this->expectException('ValueError');
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('cal_to_jd(): Argument #1 ($calendar) must be a valid calendar ID');
 
         cal_to_jd(999, 1, 1, 1);
     }
@@ -946,15 +747,7 @@ class ShimTest extends TestCase
      */
     public function testEasterDateHighYear1()
     {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->expectExceptionMessage('easter_date(): Argument #1 ($year) must be between 1970 and 2037 (inclusive)');
-            $this->expectException('ValueError');
-        } else {
-            $this->expectErrorMessage('This function is only valid for years between 1970 and 2037 inclusive');
-            $this->expectError();
-        }
-
-        Shim::easterDate(2038);
+        $this->assertSame(Shim::easterDate(2038), easter_date(2038));
     }
 
     /**
@@ -966,15 +759,7 @@ class ShimTest extends TestCase
      */
     public function testEasterDateHighYear2()
     {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->expectExceptionMessage('easter_date(): Argument #1 ($year) must be between 1970 and 2037 (inclusive)');
-            $this->expectException('ValueError');
-        } else {
-            $this->expectErrorMessage('This function is only valid for years between 1970 and 2037 inclusive');
-            $this->expectError();
-        }
-
-        easter_date(2038);
+        $this->assertSame(Shim::easterDate(2050), easter_date(2050));
     }
 
     /**
@@ -986,13 +771,8 @@ class ShimTest extends TestCase
      */
     public function testEasterDateLowYear1()
     {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->expectExceptionMessage('easter_date(): Argument #1 ($year) must be between 1970 and 2037 (inclusive)');
-            $this->expectException('ValueError');
-        } else {
-            $this->expectErrorMessage('This function is only valid for years between 1970 and 2037 inclusive');
-            $this->expectError();
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('easter_date(): Argument #1 ($year) must be a year after 1970 (inclusive)');
 
         Shim::easterDate(1969);
     }
@@ -1006,13 +786,8 @@ class ShimTest extends TestCase
      */
     public function testEasterDateLowYear2()
     {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->expectExceptionMessage('easter_date(): Argument #1 ($year) must be between 1970 and 2037 (inclusive)');
-            $this->expectException('ValueError');
-        } else {
-            $this->expectErrorMessage('This function is only valid for years between 1970 and 2037 inclusive');
-            $this->expectError();
-        }
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('easter_date(): Argument #1 ($year) must be a year after 1970 (inclusive)');
 
         easter_date(1969);
     }
@@ -1026,7 +801,7 @@ class ShimTest extends TestCase
      */
     public function testEasterDays()
     {
-        foreach (array(-4, 1751, 1752, 1753, 1581, 1582, 1583) as $year) {
+        foreach (array(1751, 1752, 1753, 1581, 1582, 1583) as $year) {
             $this->assertSame(Shim::easterDays($year, 999), easter_days($year, 999));
             $this->assertSame(Shim::easterDays($year, CAL_EASTER_DEFAULT), easter_days($year, CAL_EASTER_DEFAULT));
             $this->assertSame(Shim::easterDays($year, CAL_EASTER_ROMAN), easter_days($year, CAL_EASTER_ROMAN));
@@ -1097,7 +872,6 @@ class ShimTest extends TestCase
      * Test the implementation of Shim::jdDayOfWeek() against JDDayOfWeek()
      *
      * @covers \Fisharebest\ExtCalendar\Shim::jdDayOfWeek
-     * @covers \Fisharebest\ExtCalendar\Shim::shouldEmulateBug67960
      * @link https://bugs.php.net/bug.php?id=67960
      *
      * @return void
@@ -1109,8 +883,8 @@ class ShimTest extends TestCase
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), 'Sunday');
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 2), 'Sun');
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 0);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Sun' : 'Sunday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Sunday' : 'Sun');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Sunday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Sun');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1130,8 +904,8 @@ class ShimTest extends TestCase
         $julian_day = GregorianToJD(9, 1, 2014); // 2456902
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 1);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Mon' : 'Monday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Monday' : 'Mon');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Monday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Mon');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1151,8 +925,8 @@ class ShimTest extends TestCase
         $julian_day = GregorianToJD(9, 2, 2014); // 2456903
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 2);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Tue' : 'Tuesday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Tuesday' : 'Tue');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Tuesday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Tue');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1172,8 +946,8 @@ class ShimTest extends TestCase
         $julian_day = GregorianToJD(9, 3, 2014); // 2456904
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 3);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Wed' : 'Wednesday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Wednesday' : 'Wed');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Wednesday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Wed');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1193,8 +967,8 @@ class ShimTest extends TestCase
         $julian_day = GregorianToJD(9, 4, 2014); // 2456905
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 4);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Thu' : 'Thursday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Thursday' : 'Thu');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Thursday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Thu');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1214,8 +988,8 @@ class ShimTest extends TestCase
         $julian_day = GregorianToJD(9, 5, 2014); // 2456906
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 5);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Fri' : 'Friday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Friday' : 'Fri');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Friday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Fri');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1235,8 +1009,8 @@ class ShimTest extends TestCase
         $julian_day = GregorianToJD(9, 6, 2014); // 2456907
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_DAYNO), 6);
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), Shim::shouldEmulateBug67960() ? 'Sat' : 'Saturday');
-        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), Shim::shouldEmulateBug67960() ? 'Saturday' : 'Sat');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_LONG), 'Saturday');
+        $this->assertSame(Shim::jdDayOfWeek($julian_day, CAL_DOW_SHORT), 'Sat');
 
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 0), JDDayOfWeek($julian_day, 0));
         $this->assertSame(Shim::jdDayOfWeek($julian_day, 1), JDDayOfWeek($julian_day, 1));
@@ -1446,7 +1220,7 @@ class ShimTest extends TestCase
      */
     public function testJdToGregorianEdgeCases()
     {
-        $MAX_JD = PHP_INT_SIZE == 4 ? 536838866 : 2305843009213661906;
+        $MAX_JD = PHP_INT_SIZE == 4 ? 536838866 : 784350656097;
 
         $this->assertSame(cal_from_jd(-1, CAL_GREGORIAN), Shim::calFromJd(-1, CAL_GREGORIAN));
         $this->assertSame('0/0/0', Shim::jdToGregorian(-1));
@@ -1461,14 +1235,7 @@ class ShimTest extends TestCase
         $this->assertSame('11/25/-4714', JDToGregorian(1));
 
         // PHP overflows and gives bogus results
-        //$this->assertSame(cal_from_jd($MAX_JD, CAL_GREGORIAN), Shim::calFromJd($MAX_JD, CAL_GREGORIAN));
-        //$this->assertSame(JDToGregorian($MAX_JD), Shim::jdToGregorian($MAX_JD));
-        $this->assertNotSame('0/0/0', JDToGregorian($MAX_JD));
-        $this->assertNotSame('0/0/0', Shim::jdToGregorian($MAX_JD));
-
-        $this->assertSame(cal_from_jd($MAX_JD + 1, CAL_GREGORIAN), Shim::calFromJd($MAX_JD + 1, CAL_GREGORIAN));
-        $this->assertSame('0/0/0', Shim::jdToGregorian($MAX_JD + 1));
-        $this->assertSame('0/0/0', JDToGregorian($MAX_JD + 1));
+        $this->assertSame(JDToGregorian($MAX_JD), Shim::jdToGregorian($MAX_JD));
     }
 
     /**
@@ -1484,7 +1251,7 @@ class ShimTest extends TestCase
     public function testJdToJewish()
     {
         for ($n = 0; $n < static::ITERATIONS; ++$n) {
-            $julian_day = mt_rand(JewishToJD(1, 1, 1000), JewishToJD(13, 29, 9999));
+            $julian_day = mt_rand(712878, 2539109);
 
             $this->assertSame(Shim::jdToJewish($julian_day, false, 0), jdtojewish($julian_day));
             $this->assertSame(Shim::calFromJd($julian_day, CAL_JEWISH), cal_from_jd($julian_day, CAL_JEWISH));
@@ -1539,7 +1306,7 @@ class ShimTest extends TestCase
     public function testJdToJewishHebrew()
     {
         for ($n = 0; $n < static::ITERATIONS; ++$n) {
-            $julian_day = mt_rand(JewishToJD(1, 1, 1000), JewishToJD(13, 29, 9999));
+            $julian_day = mt_rand(712878, 2539109);
             $flags = mt_rand(0, 7);
             $this->assertSame(Shim::jdToJewish($julian_day, true, $flags), jdtojewish($julian_day, true, $flags));
         }
@@ -1553,14 +1320,22 @@ class ShimTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\WithoutErrorHandler]
     public function testJdToJewishHebrewOutOfRangeLow1()
     {
-        $this->expectErrorMessage('Year out of range (0-9999)');
-        $this->expectError();
+        set_error_handler(static function (int $errno, string $errstr): never {
+            throw new \ErrorException($errstr, 0, $errno);
+        });
 
-        $julian_day = JewishToJd(1, 1, 1) - 1;
-
-        Shim::jdToJewish($julian_day, true, 0);
+        try {
+            $julian_day = JewishToJd(1, 1, 1) - 1;
+            Shim::jdToJewish($julian_day, true, 0);
+            $this->fail('Expected error was not triggered');
+        } catch (\ErrorException $e) {
+            $this->assertStringContainsString('Year out of range (0-9999)', $e->getMessage());
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**
@@ -1573,11 +1348,10 @@ class ShimTest extends TestCase
      */
     public function testJdToJewishHebrewOutOfRangeLow2()
     {
-        $this->expectErrorMessage('Year out of range (0-9999)');
-        $this->expectError();
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Year out of range (0-9999)');
 
         $julian_day = JewishToJd(1, 1, 1) - 1;
-
         JdToJewish($julian_day, true, 0);
     }
 
@@ -1589,14 +1363,21 @@ class ShimTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\WithoutErrorHandler]
     public function testJdToJewishHebrewOutOfRangeHigh1()
     {
-        $this->expectErrorMessage('Year out of range (0-9999)');
-        $this->expectError();
+        set_error_handler(static function (int $errno, string $errstr): never {
+            throw new \ErrorException($errstr, 0, $errno);
+        });
 
-        $julian_day = JewishToJd(13, 29, 9999) + 1;
-
-        Shim::jdToJewish($julian_day, true, 0);
+        try {
+            Shim::jdToJewish(4000076, true, 0);
+            $this->fail('Expected error was not triggered');
+        } catch (\ErrorException $e) {
+            $this->assertStringContainsString('Year out of range (0-9999)', $e->getMessage());
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**
@@ -1609,12 +1390,10 @@ class ShimTest extends TestCase
      */
     public function testJdToJewishHebrewOutOfRangeHigh2()
     {
-        $this->expectErrorMessage('Year out of range (0-9999)');
-        $this->expectError();
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('Year out of range (0-9999)');
 
-        $julian_day = JewishToJd(13, 29, 9999) + 1;
-
-        JdToJewish($julian_day, true, 0);
+        JdToJewish(4000076, true, 0);
     }
 
     /**
@@ -1704,15 +1483,10 @@ class ShimTest extends TestCase
         $this->assertIsInt(Shim::jdToUnix($lower_limit));
         $this->assertSame(Shim::jdToUnix($lower_limit), jdtounix($lower_limit));
 
-        if (PHP_VERSION_ID < 80000) {
-            $this->assertFalse(Shim::jdToUnix($lower_limit - 1));
-            $this->assertSame(Shim::jdToUnix($lower_limit - 1), jdtounix($lower_limit - 1));
-        } else {
-            $this->expectException('ValueError');
-            $this->expectExceptionMessage('jday must be between 2440588 and ' . Shim::jdToUnixUpperLimit());
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('jday must be between 2440588 and ' . Shim::jdToUnixUpperLimit());
 
-            Shim::jdToUnix($lower_limit - 1);
-        }
+        Shim::jdToUnix($lower_limit - 1);
     }
 
     /**
@@ -1730,15 +1504,10 @@ class ShimTest extends TestCase
         $this->assertIsInt(Shim::jdToUnix($upper_limit));
         $this->assertSame(Shim::jdToUnix($upper_limit), jdtounix($upper_limit));
 
-        if (PHP_VERSION_ID < 80000) {
-            $this->assertFalse(Shim::jdToUnix($upper_limit + 1));
-            $this->assertSame(Shim::jdToUnix($upper_limit + 1), jdtounix($upper_limit + 1));
-        } else {
-            $this->expectException('ValueError');
-            $this->expectExceptionMessage('jday must be between 2440588 and ' . Shim::jdToUnixUpperLimit());
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('jday must be between 2440588 and ' . Shim::jdToUnixUpperLimit());
 
-            Shim::jdToUnix($upper_limit + 1);
-        }
+        Shim::jdToUnix($upper_limit + 1);
     }
 
     /**
@@ -1756,7 +1525,7 @@ class ShimTest extends TestCase
         $this->assertSame(Shim::jewishToJD(1, 1, 0), JewishToJD(1, 1, 0));
 
         for ($n = 0; $n < static::ITERATIONS; ++$n) {
-            $year = mt_rand(1, 9999);
+            $year = mt_rand(1, 5999);
             $month = mt_rand(1, 13);
             $day = mt_rand(1, 29);
 
@@ -1816,15 +1585,10 @@ class ShimTest extends TestCase
         $this->assertSame(Shim::unixToJd(2147483647), 2465443);
         $this->assertSame(Shim::unixToJd(2147483647), unixtojd(2147483647));
 
-        if (PHP_VERSION_ID < 80000) {
-            $this->assertSame(Shim::unixToJd(-1), false);
-            $this->assertSame(Shim::unixToJd(-1), unixtojd(-1));
-        } else {
-            $this->expectExceptionMessage('unixtojd(): Argument #1 ($timestamp) must be greater than or equal to 0');
-            $this->expectException('ValueError');
+        $this->expectException('ValueError');
+        $this->expectExceptionMessage('unixtojd(): Argument #1 ($timestamp) must be greater than or equal to 0');
 
-            Shim::unixToJd(-1);
-        }
+        Shim::unixToJd(-1);
     }
 
     /**

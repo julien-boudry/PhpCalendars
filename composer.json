@@ -18,10 +18,10 @@
 			"issues": "https://github.com/fisharebest/ext-calendar/issues"
 	},
 	"require": {
-		"php": ">=5.3.0"
+		"php": ">=8.2"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "*",
+		"phpunit/phpunit": "^13",
 		"friendsofphp/php-cs-fixer": "^3.94"
 	},
 	"provide": {

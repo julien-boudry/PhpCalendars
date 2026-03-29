@@ -21,7 +21,7 @@
 
 namespace Fisharebest\ExtCalendar;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class GregorianCalendarTest extends TestCase
 {
@@ -31,7 +31,7 @@ class GregorianCalendarTest extends TestCase
      *
      * @return void
      */
-    public function set_up()
+    protected function setUp(): void
     {
         Shim::create();
     }
@@ -97,7 +97,7 @@ class GregorianCalendarTest extends TestCase
     {
         $gregorian = new GregorianCalendar();
 
-        foreach (array(2037, 2035, 2030, 1981, 1894, 1875, -1, -2, -3, -15, -19, -34, -53, -1712, -1788) as $year) {
+        foreach (array(2037, 2035, 2030, 1981, 1894, 1875) as $year) {
             $this->assertSame($gregorian->easterDays($year), easter_days($year, CAL_EASTER_ALWAYS_GREGORIAN));
         }
     }

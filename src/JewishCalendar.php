@@ -28,8 +28,6 @@ use InvalidArgumentException;
 
 class JewishCalendar implements CalendarInterface
 {
-    /** Optional behaviour for this calendar. */
-    const EMULATE_BUG_54254 = 'EMULATE_BUG_54254';
 
     /** Place this symbol before the final letter of a sequence of numerals */
     const GERSHAYIM_ISO8859 = '"';
@@ -164,19 +162,6 @@ class JewishCalendar implements CalendarInterface
     /** @var int[] Rosh Hashanah cannot fall on a Sunday, Wednesday or Friday.  Move the year start accordingly. */
     private static $ROSH_HASHANAH = array(347998, 347997, 347997, 347998, 347997, 347998, 347997);
 
-    /** @var mixed[] special behaviour for this calendar */
-    protected $options = array(
-        self::EMULATE_BUG_54254 => false,
-    );
-
-    /**
-     * @param mixed[] $options Some calendars have options that change their behaviour.
-     */
-    public function __construct($options = array())
-    {
-        $this->options = array_merge($this->options, $options);
-    }
-
     /**
      * Determine the number of days in a specified month, allowing for leap years, etc.
      *
@@ -300,9 +285,6 @@ class JewishCalendar implements CalendarInterface
             $day -= $this->daysInMonth($year, $month);
             $month++;
         }
-
-        // PHP 5.4 and earlier converted non leap-year Adar into month 6, instead of month 7.
-        $month -= ($month === 7 && $this->options[self::EMULATE_BUG_54254] && !$this->isLeapYear($year)) ? 1 : 0;
 
         return array($year, $month, $day);
     }
@@ -460,8 +442,8 @@ class JewishCalendar implements CalendarInterface
             "\xeb\xf1\xec\xe5", // Kislev - כסלו
             "\xe8\xe1\xfa", // Tevet - טבת
             "\xf9\xe1\xe8", // Shevat - שבט
-            $leap_year ? ($this->options[self::EMULATE_BUG_54254] ? "\xe0\xe3\xf8" : "\xe0\xe3\xf8 \xe0'") : "\xe0\xe3\xf8", // Adar I - אדר - אדר א׳ - אדר
-            $leap_year ? ($this->options[self::EMULATE_BUG_54254] ? "'\xe0\xe3\xf8 \xe1" : "\xe0\xe3\xf8 \xe1'") : "\xe0\xe3\xf8", // Adar II - 'אדר ב - אדר ב׳ - אדר
+            $leap_year ? "\xe0\xe3\xf8 \xe0'" : "\xe0\xe3\xf8", // Adar I - אדר א׳ - אדר
+            $leap_year ? "\xe0\xe3\xf8 \xe1'" : "\xe0\xe3\xf8", // Adar II - אדר ב׳ - אדר
             "\xf0\xe9\xf1\xef", // Nisan - ניסן
             "\xe0\xe9\xe9\xf8", // Iyar - אייר
             "\xf1\xe9\xe5\xef", // Sivan - סיון
