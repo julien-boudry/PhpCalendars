@@ -374,8 +374,6 @@ class JewishCalendar implements CalendarInterface
     /**
      * Hebrew month names.
      *
-     * @link https://bugs.php.net/bug.php?id=54254
-     *
      * @return string[]
      */
     protected function hebrewMonthNames(int $year): array

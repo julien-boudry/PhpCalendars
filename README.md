@@ -94,26 +94,10 @@ $jewish->numberToHebrewNumerals(5781, true);  // "ה׳תשפ״א"
 Known restrictions and limitations
 ==================================
 
-When faced with invalid inputs, the shim functions trigger `E_USER_WARNING` instead of `E_WARNING`.  The text of the error messages is the same.
-
 The functions `easterdate()` and `jdtounixtime()` use PHP‘s timezone, instead of the operating system‘s timezone.  These may be different.
-
-Compatibility with different versions of PHP
-============================================
-
-The following PHP bugs are emulated, according to the version of PHP being used.
-Thus the package always provides the same behaviour as the native `ext/calendar` extension.
-
-* [#54254](https://bugs.php.net/bug.php?id=54254) Jewish month "Adar" - fixed in PHP 5.5.
-
-* [#67960](https://bugs.php.net/bug.php?id=67960) Constants `CAL_DOW_SHORT` and `CAL_DOW_LONG` - found and [fixed](https://github.com/php/php-src/commit/244fc1e05367dc7ebdf2db260c8bc8b106563d26) by this project - fixed in PHP 5.5.21 and 5.6.5.
-
-* [#67976](https://bugs.php.net/bug.php?id=67976) Wrong value in `cal_days_in_month()` for French calendar - found by this project.
 
 Development and contributions
 =============================
-
-Due to the known restrictions above, you may need to run unit tests using `TZ=UTC phpunit`.
 
 Pull requests are welcome.  Please ensure you include unit-tests where applicable.
 
