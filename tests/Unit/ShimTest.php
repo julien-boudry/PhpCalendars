@@ -558,7 +558,7 @@ test('jd to gregorian', function (): void {
     }
 });
 test('jd to gregorian edge cases', function (): void {
-    $MAX_JD = \PHP_INT_SIZE == 4 ? 536838866 : 784350656097;
+    $MAX_JD = 784350656097;
 
     expect(Shim::calFromJd(-1, \CAL_GREGORIAN))->toBe(cal_from_jd(-1, \CAL_GREGORIAN));
     expect(Shim::jdToGregorian(-1))->toBe('0/0/0');
@@ -651,7 +651,7 @@ test('jd to julian', function (): void {
     }
 });
 test('jd to julian edge cases', function (): void {
-    $MAX_JD = \PHP_INT_SIZE == 4 ? 536838829 : 784368370349;
+    $MAX_JD = 784368370349;
 
     expect(Shim::calFromJd(-1, \CAL_JULIAN))->toBe(cal_from_jd(-1, \CAL_JULIAN));
     expect(Shim::jdToJulian(-1))->toBe('0/0/0');
