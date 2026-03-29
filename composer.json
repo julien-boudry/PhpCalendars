@@ -1,39 +1,46 @@
 {
-	"name": "fisharebest/ext-calendar",
-	"description": "Implementation of the Arabic (Hijri), French, Gregorian, Jewish, Julian and Persian (Jalali) calendars.  Also provides a replacement for the PHP ext/calendar extension.",
-	"type": "library",
-	"keywords": [
-		"calendar", "ext-calendar", "julian day", "julian day number",
-		"arabic", "hijri", "persian", "jalali", "shamsi",
-		"gregorian", "julian", "jewish", "hebrew", "french"
-	],
-	"homepage": "https://github.com/fisharebest/ext-calendar",
-	"license": "GPL-3.0-or-later",
-	"authors": [{
-			"name": "Greg Roach",
-			"email": "greg@subaqua.co.uk",
-			"role": "Developer"
-	}],
-	"support": {
-			"issues": "https://github.com/fisharebest/ext-calendar/issues"
-	},
-	"require": {
-		"php": ">=8.2"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^13",
-		"friendsofphp/php-cs-fixer": "^3.94",
-		"phpstan/phpstan": "^2.1"
-	},
-	"provide": {
-		"ext-calendar": "1"
-	},
-	"autoload": {
-		"files": [
-			"src/shims.php"
-		],
-		"psr-4": {
-			"Fisharebest\\ExtCalendar\\": "src/"
-		}
-	}
+    "name": "fisharebest/ext-calendar",
+    "description": "Implementation of the Arabic (Hijri), French, Gregorian, Jewish, Julian and Persian (Jalali) calendars.  Also provides a replacement for the PHP ext/calendar extension.",
+    "type": "library",
+    "keywords": [
+        "calendar", "ext-calendar", "julian day", "julian day number",
+        "arabic", "hijri", "persian", "jalali", "shamsi",
+        "gregorian", "julian", "jewish", "hebrew", "french"
+    ],
+    "homepage": "https://github.com/fisharebest/ext-calendar",
+    "license": "GPL-3.0-or-later",
+    "authors": [{
+            "name": "Greg Roach",
+            "email": "greg@subaqua.co.uk",
+            "role": "Developer"
+    }],
+    "support": {
+            "issues": "https://github.com/fisharebest/ext-calendar/issues"
+    },
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13",
+        "friendsofphp/php-cs-fixer": "^3.94",
+        "phpstan/phpstan": "^2.1",
+        "rector/rector": "^2.3"
+    },
+    "provide": {
+        "ext-calendar": "1"
+    },
+    "autoload": {
+        "files": [
+            "src/shims.php"
+        ],
+        "psr-4": {
+            "Fisharebest\\ExtCalendar\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "lint": "php-cs-fixer fix",
+        "phpstan": "phpstan analyse --no-interaction",
+        "rector": "rector process --dry-run"
+    }
 }
