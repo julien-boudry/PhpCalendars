@@ -21,10 +21,10 @@
         "php": ">=8.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^13",
         "friendsofphp/php-cs-fixer": "^3.94",
         "phpstan/phpstan": "^2.1",
-        "rector/rector": "^2.3"
+        "rector/rector": "^2.3",
+        "pestphp/pest": "^4.4"
     },
     "provide": {
         "ext-calendar": "1"
@@ -37,10 +37,20 @@
             "Fisharebest\\ExtCalendar\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "test": "pest",
         "lint": "php-cs-fixer fix",
         "phpstan": "phpstan analyse --no-interaction",
         "rector": "rector process --dry-run"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
