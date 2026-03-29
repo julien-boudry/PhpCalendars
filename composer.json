@@ -24,7 +24,8 @@
         "friendsofphp/php-cs-fixer": "^3.94",
         "phpstan/phpstan": "^2.1",
         "rector/rector": "^2.3",
-        "pestphp/pest": "^4.4"
+        "pestphp/pest": "^4.4",
+        "phpbench/phpbench": "^1.6"
     },
     "provide": {
         "ext-calendar": "1"
@@ -39,14 +40,16 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Fisharebest\\ExtCalendar\\Benchmarks\\": "benchmarks/"
         }
     },
     "scripts": {
         "test": "pest",
         "lint": "php-cs-fixer fix",
         "phpstan": "phpstan analyse --no-interaction",
-        "rector": "rector process --dry-run"
+        "rector": "rector process --dry-run",
+        "bench": "phpbench run --report=aggregate"
     },
     "config": {
         "allow-plugins": {
