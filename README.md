@@ -96,6 +96,8 @@ The functions `easter_date()` and `jdtounix()` use PHP‘s timezone, instead of 
 Development and contributions
 =============================
 
+See the [CHANGELOG](CHANGELOG.md) for the full release history.
+
 Pull requests are welcome.  Please ensure you include unit-tests where applicable.
 
 ``` bash

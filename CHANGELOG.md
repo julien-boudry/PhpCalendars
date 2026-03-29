@@ -1,6 +1,34 @@
 CHANGE LOG
 ==========
 
+## 3.0.0 (2026-03-29)
+
+This is the first release under the `CondorcetPHP\PhpCalendars` namespace,
+forked from [fisharebest/ext-calendar](https://github.com/fisharebest/ext-calendar).
+
+### Breaking changes
+ - Rename namespace from `Fisharebest\ExtCalendar` to `CondorcetPHP\PhpCalendars`.
+ - Rename Composer package from `fisharebest/ext-calendar` to `condorcet-php/php-calendars`.
+ - Require PHP >= 8.5.
+ - Invalid arguments now throw `ValueError` instead of triggering `E_USER_WARNING`.
+ - All methods use native parameter and return type declarations.
+
+### Added
+ - PHPBench benchmarks (`composer bench`).
+
+### Changed
+ - Migrated test suite from PHPUnit to Pest.
+ - Added PHPStan static analysis at level 10.
+ - Added php-cs-fixer code style enforcement (`composer lint`).
+ - Added Rector for automated refactoring (`composer rector`).
+ - Removed 32-bit compatibility code (64-bit only).
+ - Removed PHP bug emulation code.
+ - Removed HHVM support.
+
+---
+
+*Versions 1.x–2.x were released under the original project [fisharebest/ext-calendar](https://github.com/fisharebest/ext-calendar).*
+
 ## 2.6.0 (2022-05-31)
  - Update error handling to match latest versions of PHP.
  - Add PHP 8 to the test matrix, and remove PHP 5.3 from it.
