@@ -131,8 +131,8 @@ test('cal days in month french high year2', function () {
 });
 test('cal days in month gregorian', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(-4713, 9999);
-        $month = mt_rand(1, 12);
+        $year = $this->randomizer->getInt(-4713, 9999);
+        $month = $this->randomizer->getInt(1, 12);
         if ($year != 0) {
             expect(cal_days_in_month(\CAL_GREGORIAN, $month, $year))->toBe(Shim::calDaysInMonth(\CAL_GREGORIAN, $month, $year));
         }
@@ -164,8 +164,8 @@ test('cal days in month gregorian invalid year2', function () {
 });
 test('cal days in month julian', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(-4713, 9999);
-        $month = mt_rand(1, 12);
+        $year = $this->randomizer->getInt(-4713, 9999);
+        $month = $this->randomizer->getInt(1, 12);
         if ($year != 0) {
             expect(cal_days_in_month(\CAL_GREGORIAN, $month, $year))->toBe(Shim::calDaysInMonth(\CAL_GREGORIAN, $month, $year));
         }
@@ -173,8 +173,8 @@ test('cal days in month julian', function () {
 });
 test('cal days in month jewish', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(1, 5999);
-        $month = mt_rand(1, 13);
+        $year = $this->randomizer->getInt(1, 5999);
+        $month = $this->randomizer->getInt(1, 13);
         expect(cal_days_in_month(\CAL_JEWISH, $month, $year))->toBe(Shim::calDaysInMonth(\CAL_JEWISH, $month, $year));
     }
 });
@@ -362,9 +362,9 @@ test('easter days', function () {
 });
 test('french to jd', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(1, 14);
-        $month = mt_rand(1, 13);
-        $day = mt_rand(1, $month == 13 ? 6 : 28);
+        $year = $this->randomizer->getInt(1, 14);
+        $month = $this->randomizer->getInt(1, 13);
+        $day = $this->randomizer->getInt(1, $month == 13 ? 6 : 28);
 
         expect(frenchtojd($month, $day, $year))->toBe(Shim::frenchToJd($month, $day, $year));
         expect(cal_to_jd(\CAL_FRENCH, $month, $day, $year))->toBe(Shim::calToJd(\CAL_FRENCH, $month, $day, $year));
@@ -377,9 +377,9 @@ test('gregorian to jd', function () {
     expect(gregoriantojd(1, 1, 0))->toBe(Shim::gregorianToJd(1, 1, 0));
 
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(-4713, 9999);
-        $month = mt_rand(1, 12);
-        $day = mt_rand(1, 30);
+        $year = $this->randomizer->getInt(-4713, 9999);
+        $month = $this->randomizer->getInt(1, 12);
+        $day = $this->randomizer->getInt(1, 30);
 
         expect(gregoriantojd($month, $day, $year))->toBe(Shim::gregorianToJd($month, $day, $year));
         expect(cal_to_jd(\CAL_GREGORIAN, $month, $day, $year))->toBe(Shim::calToJd(\CAL_GREGORIAN, $month, $day, $year));
@@ -517,7 +517,7 @@ test('jd month name invalid mode', function () {
 });
 test('jd to french', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $julian_day = mt_rand(gregoriantojd(9, 22, 1792), gregoriantojd(9, 22, 1806));
+        $julian_day = $this->randomizer->getInt(gregoriantojd(9, 22, 1792), gregoriantojd(9, 22, 1806));
         expect(jdtofrench($julian_day))->toBe(Shim::jdToFrench($julian_day));
         expect(cal_from_jd($julian_day, \CAL_FRENCH))->toBe(Shim::calFromJd($julian_day, \CAL_FRENCH));
     }
@@ -550,7 +550,7 @@ test('jd to french out of range', function () {
 });
 test('jd to gregorian', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $julian_day = mt_rand(1, gregoriantojd(12, 31, 9999));
+        $julian_day = $this->randomizer->getInt(1, gregoriantojd(12, 31, 9999));
 
         expect(jdtogregorian($julian_day))->toBe(Shim::jdToGregorian($julian_day));
         expect(cal_from_jd($julian_day, \CAL_GREGORIAN))->toBe(Shim::calFromJd($julian_day, \CAL_GREGORIAN));
@@ -576,7 +576,7 @@ test('jd to gregorian edge cases', function () {
 });
 test('jd to jewish', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $julian_day = mt_rand(712878, 2539109);
+        $julian_day = $this->randomizer->getInt(712878, 2539109);
 
         expect(jdtojewish($julian_day))->toBe(Shim::jdToJewish($julian_day, false, 0));
         expect(cal_from_jd($julian_day, \CAL_JEWISH))->toBe(Shim::calFromJd($julian_day, \CAL_JEWISH));
@@ -609,8 +609,8 @@ test('jd to jewish edge cases', function () {
 });
 test('jd to jewish hebrew', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $julian_day = mt_rand(712878, 2539109);
-        $flags = mt_rand(0, 7);
+        $julian_day = $this->randomizer->getInt(712878, 2539109);
+        $flags = $this->randomizer->getInt(0, 7);
         expect(jdtojewish($julian_day, true, $flags))->toBe(Shim::jdToJewish($julian_day, true, $flags));
     }
 });
@@ -708,9 +708,9 @@ test('jewish to jd', function () {
     expect(jewishtojd(1, 1, 0))->toBe(Shim::jewishToJD(1, 1, 0));
 
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(1, 5999);
-        $month = mt_rand(1, 13);
-        $day = mt_rand(1, 29);
+        $year = $this->randomizer->getInt(1, 5999);
+        $month = $this->randomizer->getInt(1, 13);
+        $day = $this->randomizer->getInt(1, 29);
 
         expect(jewishtojd($month, $day, $year))->toBe(Shim::jewishToJD($month, $day, $year));
         expect(cal_to_jd(\CAL_JEWISH, $month, $day, $year))->toBe(Shim::calToJd(\CAL_JEWISH, $month, $day, $year));
@@ -720,9 +720,9 @@ test('julian to jd', function () {
     expect(juliantojd(1, 1, 0))->toBe(Shim::julianToJd(1, 1, 0));
 
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $year = mt_rand(-4713, 9999);
-        $month = mt_rand(1, 12);
-        $day = mt_rand(1, 30);
+        $year = $this->randomizer->getInt(-4713, 9999);
+        $month = $this->randomizer->getInt(1, 12);
+        $day = $this->randomizer->getInt(1, 30);
 
         expect(juliantojd($month, $day, $year))->toBe(Shim::julianToJd($month, $day, $year));
         expect(cal_to_jd(\CAL_JULIAN, $month, $day, $year))->toBe(Shim::calToJd(\CAL_JULIAN, $month, $day, $year));
@@ -730,7 +730,7 @@ test('julian to jd', function () {
 });
 test('unix to jd', function () {
     for ($n = 0; $n < TestCase::ITERATIONS; ++$n) {
-        $unix = mt_rand(1, 2147483647);
+        $unix = $this->randomizer->getInt(1, 2147483647);
         expect(unixtojd($unix))->toBe(Shim::unixToJd($unix));
     }
 });
