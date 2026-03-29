@@ -12,6 +12,10 @@
     "authors": [{
             "name": "Greg Roach",
             "email": "greg@subaqua.co.uk",
+            "role": "Original Developer"
+    }, {
+            "name": "Julien Boudry",
+            "email": "julien@condorcet.io",
             "role": "Developer"
     }],
     "support": {

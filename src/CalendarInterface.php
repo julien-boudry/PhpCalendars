@@ -5,7 +5,8 @@
  * these methods.
  *
  * @author    Greg Roach <greg@subaqua.co.uk>
- * @copyright (c) 2014-2021 Greg Roach
+ * @author    Julien Boudry <julien@condorcet.io>
+ * @copyright (c) 2014-2021 Greg Roach, 2025-2026 Julien Boudry
  * @license   This program is free software: you can redistribute it and/or modify
  *            it under the terms of the GNU General Public License as published by
  *            the Free Software Foundation, either version 3 of the License, or

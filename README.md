@@ -1,6 +1,11 @@
 PHP Calendars
 =============
 
+Pure PHP implementation of six historical and religious calendars, with an object-oriented API and a drop-in replacement for PHP's `ext/calendar` extension.
+
+> [!NOTE]
+> This project is a fork of [fisharebest/ext-calendar](https://github.com/fisharebest/ext-calendar), originally written by Greg Roach for the [webtrees](http://www.webtrees.net) project. It modernises the codebase (PHP 8.5+, strict types, native type declarations) and continues development under the `CondorcetPHP` namespace.
+
 This package provides a pure PHP implementation of the
 [Arabic (Hijri)](https://en.wikipedia.org/wiki/Islamic_calendar),
 [French Republican](https://en.wikipedia.org/wiki/French_Republican_Calendar),
@@ -113,13 +118,6 @@ composer phpstan
 # Code style
 composer lint
 ```
-
-History
-=======
-
-These functions were originally written for the [webtrees](http://www.webtrees.net)
-project.  As part of a refactoring process, they were extracted to a standalone
-library, given version numbers, unit tests, etc.
 
 Future plans
 ============
