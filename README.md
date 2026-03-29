@@ -1,23 +1,71 @@
-[![Build Status](https://travis-ci.org/fisharebest/ext-calendar.svg?branch=master)](https://travis-ci.org/fisharebest/ext-calendar)
-[![Coverage Status](https://coveralls.io/repos/fisharebest/ext-calendar/badge.png)](https://coveralls.io/r/fisharebest/ext-calendar)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/952d6e11-6941-447b-9757-fc8dbc3d2a1f/mini.png)](https://insight.sensiolabs.com/projects/952d6e11-6941-447b-9757-fc8dbc3d2a1f)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fisharebest/ext-calendar/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fisharebest/ext-calendar/?branch=master)
-[![StyleCI](https://github.styleci.io/repos/25974036/shield)](https://github.styleci.io/repos/25974036)
-[![Code Climate](https://codeclimate.com/github/fisharebest/ext-calendar/badges/gpa.svg)](https://codeclimate.com/github/fisharebest/ext-calendar)
-
 PHP calendar functions
 ======================
 
-This package provides an implementation of the
+This package provides a pure PHP implementation of the
 [Arabic (Hijri)](https://en.wikipedia.org/wiki/Islamic_calendar),
 [French Republican](https://en.wikipedia.org/wiki/French_Republican_Calendar),
 [Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar),
 [Julian](https://en.wikipedia.org/wiki/Julian_calendar),
 [Jewish](https://en.wikipedia.org/wiki/Hebrew_calendar) and
 [Persian (Jalali)](https://en.wikipedia.org/wiki/Iranian_calendars) calendars, plus
-a replacement for PHP‘s [ext/calendar](https://php.net/calendar) extension.
-It allows you to use the following PHP functions on servers that do not have the
-ext/calendar extension installed (such as HHVM).
+a drop-in replacement for PHP‘s [ext/calendar](https://php.net/calendar) extension.
+
+Requirements
+============
+
+* PHP >= 8.5
+
+Installation
+============
+
+``` bash
+composer require fisharebest/ext-calendar
+```
+
+Object-oriented API
+===================
+
+Use the calendar classes directly.  This API supports two additional
+calendars (Arabic and Persian) that are not available in the native extension.
+
+``` php
+use Fisharebest\ExtCalendar\ArabicCalendar;
+use Fisharebest\ExtCalendar\FrenchCalendar;
+use Fisharebest\ExtCalendar\GregorianCalendar;
+use Fisharebest\ExtCalendar\JewishCalendar;
+use Fisharebest\ExtCalendar\JulianCalendar;
+use Fisharebest\ExtCalendar\PersianCalendar;
+
+// Create a calendar
+$calendar = new GregorianCalendar();
+
+// Date conversions
+$julian_day = $calendar->ymdToJd($year, $month, $day);
+[$year, $month, $day] = $calendar->jdToYmd($julian_day);
+
+// Information about days, weeks and months
+$is_leap_year   = $calendar->isLeapYear($year);
+$days_in_month  = $calendar->daysInMonth($year, $month);
+$months_in_year = $calendar->monthsInYear();       // Not all calendars have 12
+$months_in_year = $calendar->monthsInYear($year);  // In a specific year
+$days_in_week   = $calendar->daysInWeek();         // Not all calendars have 7
+
+// Which dates are valid for this calendar?
+$jd = $calendar->jdStart();
+$jd = $calendar->jdEnd();
+
+// Hebrew numerals
+$jewish = new JewishCalendar();
+$jewish->numberToHebrewNumerals(5781, false); // "תשפ״א"
+$jewish->numberToHebrewNumerals(5781, true);  // "ה׳תשפ״א"
+```
+
+Drop-in replacement for ext/calendar
+=====================================
+
+This package also provides shim functions that are automatically registered when
+the native `ext/calendar` extension is not loaded.  All 18 functions and their
+associated constants are supported:
 
 * [cal_days_in_month()](https://php.net/cal_days_in_month)
 * [cal_from_jd()](https://php.net/cal_from_jd)
@@ -38,68 +86,33 @@ ext/calendar extension installed (such as HHVM).
 * [JulianToJD()](https://php.net/JulianToJD)
 * [unixtojd()](https://php.net/unixtojd)
 
-How to use it
-=============
-
-Add the package as a dependency in your `composer.json` file:
-
-``` javascript
-require {
-    "fisharebest/ext-calendar": "~2.5"
-}
-```
-
-Now you can use the PHP functions, whether `ext/calendar` is installed or not.
-Since version 2.2, it is no longer necessary to initialise these using `Shim::create()`.
-
 ``` php
-require 'vendor/autoload.php';
-print_r(cal_info(CAL_GREGORIAN)); // Works in HHVM, or if ext-calendar is not installed
-```
-
-Alternatively, just use the calendar classes directly.
-
-``` php
-require 'vendor/autoload.php';
-
-// Create calendars
-$calendar = new Fisharebest\ExtCalendar\ArabicCalendar;
-$calendar = new Fisharebest\ExtCalendar\FrenchCalendar;
-$calendar = new Fisharebest\ExtCalendar\GregorianCalendar;
-$calendar = new Fisharebest\ExtCalendar\JewishCalendar;
-$calendar = new Fisharebest\ExtCalendar\JulianCalendar;
-$calendar = new Fisharebest\ExtCalendar\PersianCalendar;
-
-// Date conversions
-$julian_day = $calendar->ymdToJd($year, $month, $day);
-list($year, $month, $day) = $calendar->jdToYmd($julian_day);
-
-// Information about days, weeks and months
-$is_leap_year   = $calendar->isLeapYear($year);
-$days_in_month  = $calendar->daysInMonth($year, $month);
-$months_in_year = $calendar->monthsInYear();       // Not all calendars have 12
-$months_in_year = $calendar->monthsInYear($year);  // In a specific year
-$days_in_week   = $calendar->daysInWeek();         // Not all calendars have 7
-
-// Which dates are valid for this calendar?
-$jd = $calendar->jdStart();
-$jd = $calendar->jdEnd();
-
-// Miscellaneous utilities
-$jewish = new JewishCalendar;
-$jewish->numberToHebrewNumerals(5781, false); // "תשפ״א"
-$jewish->numberToHebrewNumerals(5781, true);  // "ה׳תשפ״א"
+print_r(cal_info(CAL_GREGORIAN)); // Works whether ext-calendar is installed or not
 ```
 
 Known restrictions and limitations
-==================================
+===================================
 
-The functions `easterdate()` and `jdtounixtime()` use PHP‘s timezone, instead of the operating system‘s timezone.  These may be different.
+The functions `easter_date()` and `jdtounix()` use PHP‘s timezone, instead of the operating system‘s timezone.  These may be different.
 
 Development and contributions
 =============================
 
 Pull requests are welcome.  Please ensure you include unit-tests where applicable.
+
+``` bash
+# Run the test suite (Pest)
+composer test
+
+# Run the benchmarks (native ext-calendar vs PHP implementation)
+composer bench
+
+# Static analysis
+composer phpstan
+
+# Code style
+composer lint
+```
 
 History
 =======
